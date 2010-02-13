@@ -1,0 +1,5 @@
+temp/
+bin/
+.scala_dependencies
+.settings/org.eclipse.jdt.core.prefs
+
