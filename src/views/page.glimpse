@@ -1,0 +1,9 @@
+macro page(title : string) with g : generator {
+  node html {
+    node title title
+    node h1 title
+    node div(class: "contents") {
+      include g
+    }
+  }
+}

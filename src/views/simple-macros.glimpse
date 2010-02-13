@@ -1,0 +1,12 @@
+macro p with s : string {
+  node p s
+}
+
+macro header with s : string {
+  node h2 s
+}
+
+macro subheader with s : string {
+  node h3 s
+}
+
