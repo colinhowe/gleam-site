@@ -1,71 +1,73 @@
-controller DummyController
-
-dynamic macro col(name : string) with s : string
-
-macro th(name : string) with s : string {
-  node th name
-}
-
-macro td(name : string) with s : string {
-  node td s
-}
-
-macro result_set<T>(list : java.util.List<T>) with g : generator(row : T) {
-  node table {
-    col = th
-    node tr {
-      include g(row: " ")
+page(title: "Glimpse - A View Layer Language") {
+  section(title: "What is Glimpse?") {
+    p {
+      span "Glimpse is a statically typed view layer language for the JVM."
     }
     
-    col = td
-    var even = false
-    for (T t in list) {
-      if (!even) {
-        node tr {
-          include g(row: t)
-        }
-      } else {
-        node tr(bgcolor: "#b0b0b0") {
-          include g(row: t)
-        }
+    subsection(title: "A view layer language?") {
+      p {
+        span "The standard paradigm for doing web development is the "
+        a(href: "http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller") "MVC"
+        span " pattern."
       }
-      even = !even
-    }
-  }
-}
-
-page(title: "Glimpse") {
-  header "Welcome to Glimpse"
-  
-  subheader "What is Glimpse?"
-  
-  subheader "Any samples?"
-  code ""
-    macro p with s : string {
-      node p s
-    } 
-    
-    macro div with generator g {
-      node div {
-        include g
+      
+      p {
+        span ""
+          Glimpse positions itself as a language that is well suited for writing
+          views.
+        ""
       }
     }
     
-    p &quot;&quot;
-      Welcome to glimpse.
-      This is a multi-line string
-    &quot;&quot;
-    p "Or a single line string if you prefer?"
-    
-    div {
-      p "Or something in a div?"
+    subsection(title: "What are the benefits?") {
+      p {
+        span "Glimpse offers many benefits:"
+      }
+            
+      ul {
+        li "Static typing"
+        li "Compile time checking to ensure valid structures are produced"
+        li "Increased re-use of design elements"
+        li "Abstraction of design elements away from the page itself"
+        li "Fully compiled - making it very quick"
+      }
     }
-  ""
-  
-  subheader "Where's it used?"
-  p "Here :)"
-  
-  result_set(list: c.names) { row : string =>
-    col(name: "name") row
+    
+   subsection(title: "Enough already, give me some examples") {
+      p { 
+        span "Sure."
+      }
+      code ""
+        node p "Hello world!"
+      ""
+    }
+    
+    subsection(title: "... something more complex please") {
+      code ""
+        macro code with s : string {
+          node pre s
+        }
+        
+        // This is how the above example is made
+        code &quot;&quot;
+          node p "Hello world!"
+        &quot;&quot;
+      ""
+      
+      p {
+        span ""
+          What we see above is a macro definition and usage. Macros are similar 
+          to functions in most languages.
+        ""
+      }
+      p {
+        span ""
+          The real beauty here is that you can change the code macro and the
+          changes will be found everywhere you used the code macro. This leaves
+          your designers free to make code blocks look beautiful, and your
+          developers free to get on with content and basic logic.
+        ""
+      }
+    }
   }
 }

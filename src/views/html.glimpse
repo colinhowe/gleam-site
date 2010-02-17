@@ -1,0 +1,31 @@
+macro h2 with s : string {
+  node h2 s
+} 
+
+macro h3 with s : string {
+  node h3 s
+} 
+
+macro span with s : string {
+  node span s
+}
+
+macro a(href : string) with s : string {
+  node a(href: href) s
+}
+
+macro p with g : generator {
+  node p {
+    include g
+  }
+}
+
+macro ul with g : generator {
+  node ul {
+    include g
+  }
+}
+
+macro li with s : string {
+  node li s
+}

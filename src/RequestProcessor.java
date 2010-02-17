@@ -107,7 +107,7 @@ public class RequestProcessor extends HttpServlet {
           throw new RuntimeException("Failed to instantiate view", e);
         }
         
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 10000; i++) {
           final View view;
           try {
             view = (View)viewClazz.newInstance();
