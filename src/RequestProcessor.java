@@ -77,7 +77,7 @@ public class RequestProcessor extends HttpServlet {
       }
       reader.close();
       
-      final CompilationUnit unit = new CompilationUnit(viewName, source.toString());
+      final CompilationUnit unit = new CompilationUnit(viewName, source.toString(), viewFile.getName());
       units.add(unit);
     }
     
@@ -87,7 +87,7 @@ public class RequestProcessor extends HttpServlet {
       final GlimpseCompiler compiler = new GlimpseCompiler();
       
       List<String> classPaths = new LinkedList<String>();
-      classPaths.add("/home/colin/workspace/glimpse/bin");
+      classPaths.add("D:/workspace/glimpse/bin");
       
       List<CompilationResult> compilationResults = compiler.compile(units, classPaths);
       
@@ -115,7 +115,8 @@ public class RequestProcessor extends HttpServlet {
             throw new RuntimeException("Failed to instantiate view", e);
           }
       
-          final List<Node> nodes = view.view(new DummyController());
+          final Object controller = new DummyController();
+          final List<Node> nodes = view.view(controller);
           final StringBuilder output = new StringBuilder();
           for (final Node node : nodes) {
             output.append(outputNode(node));
