@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -50,6 +51,29 @@ public class RequestProcessor extends HttpServlet {
     srv.serve();
   }
   
+  private String readFile(String filename) {
+    BufferedReader reader = null;
+    try {
+      reader = new BufferedReader(new FileReader(filename));
+      final StringBuffer source = new StringBuffer();
+      String line;
+      while ((line = reader.readLine()) != null) {
+        source.append(line + "\n");
+      }
+      return source.toString();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    } finally {
+      if (reader != null) {
+        try {
+          reader.close();
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+      }
+    }
+  }
+  
   @SuppressWarnings("deprecation")
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -57,6 +81,17 @@ public class RequestProcessor extends HttpServlet {
     long startTime = System.currentTimeMillis();
     
     // Locate all the glimpse files
+    String requestUri = request.getRequestURI().substring(1);
+    if (requestUri.indexOf(".") != -1) {
+      // Get from the resources folder
+      final String contents = readFile("resource/" + requestUri);
+      final BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(response.getOutputStream()));
+      writer.write(contents);
+      writer.flush();
+      writer.close();
+      return;
+    }
+    
     final File viewsFolder = new File(this.getClass().getResource("views/").getFile());
     final List<File> viewFiles = new LinkedList<File>();
     for (final File viewFile : viewsFolder.listFiles()) {
@@ -87,7 +122,7 @@ public class RequestProcessor extends HttpServlet {
       final GlimpseCompiler compiler = new GlimpseCompiler();
       
       List<String> classPaths = new LinkedList<String>();
-      classPaths.add("D:/workspace/glimpse/bin");
+      classPaths.add("../glimpse/bin");
       
       List<CompilationResult> compilationResults = compiler.compile(units, classPaths);
       
@@ -107,7 +142,7 @@ public class RequestProcessor extends HttpServlet {
           throw new RuntimeException("Failed to instantiate view", e);
         }
         
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 1; i++) {
           final View view;
           try {
             view = (View)viewClazz.newInstance();

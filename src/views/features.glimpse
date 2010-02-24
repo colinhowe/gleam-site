@@ -1,0 +1,68 @@
+page(title: "Glimpse - Features") {
+  section(title: "Features") {
+    subsection(title: "Macros") {
+      p "Macros allow for the re-use of basic building blocks"
+      
+      example ""
+        macro code with s : string {
+          node h3 "Code"
+          node pre s
+        }
+        
+        code &quot;&quot;
+          // We put our code here
+        &quot;&quot;
+      ""
+    }
+    
+    subsection(title: "Macro Restrictions") {
+      p ""
+        Restrict macros so that they can only be called within macros with
+        certain names.
+      ""
+      
+      example ""
+        macro section(title : string) with g : generator 
+            restrict to top level {
+          node h3 s
+        }
+        
+        macro p with s : string restrict to section {
+          node p s
+        } 
+        
+        section(title: "Welcome") {
+          p "Welcome to my page!"
+        }
+        
+        p "This won't compile, because p isn't allowed here!"
+      ""
+    }
+    
+    subsection(title: "Cascading Arguments") {
+      p ""
+        Cascading arguments allow an argument to be specified in a
+        macro statement and then the argument is passed in wherever
+        possible to any child macros.
+      ""
+      
+      example ""
+        macro form(cascade readonly : boolean) with g : generator {
+          node div {
+            include g
+          }
+        }
+        
+        macro textinput(id : string, readonly : boolean) with label : string {
+          node input(name: id, readonly: readonly) label
+        }
+        
+        form(readonly: true) {
+          // readonly: true will be passed into the call to textinput
+          // as it is a cascading argument on form
+          textinput(id: "name") "Name"
+        }
+      ""
+    }
+  }
+}

@@ -1,0 +1,6 @@
+macro example with s : string {
+  div(class: "example") {
+    a(href: "#") "+ Quick example"
+    pre s
+  }
+}

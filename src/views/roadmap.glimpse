@@ -1,0 +1,17 @@
+page(title: "Glimpse - Roadmap") {
+  section(title: "Roadmap") {
+    p ""
+      Glimpse is very young. There is lots still to do and here is what is currently
+      planned for addition:
+    ""
+    
+    ul {
+      li "Packages"
+      li "File specific macros"
+      li "Standard set of HTML macros with appropriate restrictions"
+      li "Tracking of whether a macro is the last in a generator"
+      li "Including nodes from a Java function as a method to achieve componentisation"
+      li "Value-less macro calls, e.g. br"
+    }
+  }
+}

@@ -1,9 +1,31 @@
 macro page(title : string) with g : generator {
   node html {
-    node title title
-    node h1 title
-    node div(class: "contents") {
-      include g
+    node head {
+      node title title
+      link(rel: "text/css", type: "stylesheet") "glimpse.css"
+      script(type: "text/javascript") "jquery.js"
+      script(type: "text/javascript") "glimpse.js"
+    }
+    node body {
+      div(class: "content") {
+        node h1 title
+        div(class: "links") {
+          a(href: "index") "Home"
+          span " &bull; "
+          a(href: "roadmap") "Roadmap"
+          span " &bull; "
+          a(href: "antifeatures") "Anti-features"
+          span " &bull; "
+          a(href: "quickstart") "Quick start"
+          span " &bull; "
+          a(href: "features") "Features"
+          span " &bull; "
+          a(href: "examples") "Examples"
+        }
+        div(class: "contents") {
+          include g
+        }
+      }
     }
   }
 }

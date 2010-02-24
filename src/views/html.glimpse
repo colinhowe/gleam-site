@@ -20,6 +20,10 @@ macro p with g : generator {
   }
 }
 
+macro p with s : string {
+  node p s
+}
+
 macro ul with g : generator {
   node ul {
     include g
@@ -28,4 +32,22 @@ macro ul with g : generator {
 
 macro li with s : string {
   node li s
+}
+
+macro div(class : string = " ") with g : generator {
+  node div(class: class) {
+    include g
+  }
+}
+
+macro link(type : string, rel : string) with s : string {
+  node link(type: type, rel: rel, href: s) " "
+}
+
+macro pre with s : string {
+  node pre s
+}
+
+macro script(type : string) with s : string {
+  node script(type: type, src: s) " "
 }
