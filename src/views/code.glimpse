@@ -1,3 +1,5 @@
 macro code with s : string {
-  node pre s
+  div {
+    node pre(class: "brush: java") s
+  }
 }

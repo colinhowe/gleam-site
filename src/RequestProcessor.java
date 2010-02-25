@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -51,22 +52,21 @@ public class RequestProcessor extends HttpServlet {
     srv.serve();
   }
   
-  private String readFile(String filename) {
-    BufferedReader reader = null;
+  private byte[] readFile(String filename) {
+    FileInputStream fis = null;
     try {
-      reader = new BufferedReader(new FileReader(filename));
-      final StringBuffer source = new StringBuffer();
-      String line;
-      while ((line = reader.readLine()) != null) {
-        source.append(line + "\n");
-      }
-      return source.toString();
+      fis = new FileInputStream(filename);
+      int numberBytes = fis.available();
+      byte bytearray[] = new byte[numberBytes];
+  
+      fis.read(bytearray);
+      return bytearray;
     } catch (Exception e) {
       throw new RuntimeException(e);
     } finally {
-      if (reader != null) {
+      if (fis != null) {
         try {
-          reader.close();
+          fis.close();
         } catch (IOException e) {
           throw new RuntimeException(e);
         }
@@ -84,11 +84,8 @@ public class RequestProcessor extends HttpServlet {
     String requestUri = request.getRequestURI().substring(1);
     if (requestUri.indexOf(".") != -1) {
       // Get from the resources folder
-      final String contents = readFile("resource/" + requestUri);
-      final BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(response.getOutputStream()));
-      writer.write(contents);
-      writer.flush();
-      writer.close();
+      final byte[] contents = readFile("resource/" + requestUri);
+      response.getOutputStream().write(contents);
       return;
     }
     

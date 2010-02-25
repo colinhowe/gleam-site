@@ -1,10 +1,20 @@
+macro script with code : string {
+  node script(type: "text/javascript") code
+}
+
 macro page(title : string) with g : generator {
   node html {
     node head {
       node title title
       link(rel: "text/css", type: "stylesheet") "glimpse.css"
+      link(rel: "text/css", type: "stylesheet") "syntaxhighlighter/css/shcore.css"
+      link(rel: "text/css", type: "stylesheet") "syntaxhighlighter/css/shthemedefault.css"
+      
       script(type: "text/javascript") "jquery.js"
       script(type: "text/javascript") "glimpse.js"
+      script(type: "text/javascript") "syntaxhighlighter/js/shcore.js"
+      script(type: "text/javascript") "syntaxhighlighter/js/shbrushjava.js"
+
     }
     node body {
       div(class: "content") {

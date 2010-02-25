@@ -1,9 +1,9 @@
 $(document).ready(function() {
   $(".example a").show();
-  $(".example pre").hide();
+  $(".example div").hide();
 
   $(".example a").click(function() {
-    $(this).siblings("pre").slideToggle("fast");
+    $(this).siblings("div").slideToggle("fast");
     var find = '+';
     var replace = '-';
     if ($(this).text().indexOf('+') == -1) {
@@ -12,4 +12,8 @@ $(document).ready(function() {
     }
     $(this).text($(this).text().replace(find, replace));
   });
+  
+  SyntaxHighlighter.defaults['gutter'] = false;
+  SyntaxHighlighter.defaults['gutter'] = false;
+  SyntaxHighlighter.all();
 });
