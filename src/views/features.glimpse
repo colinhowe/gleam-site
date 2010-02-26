@@ -59,9 +59,117 @@ page(title: "Glimpse - Features") {
         
         form(readonly: true) {
           // readonly: true will be passed into the call to textinput
-          // as it is a cascading argument on form
+          // as it is a cascading argument on the readonly argument in
+          // the form macro
           textinput(id: "name") "Name"
         }
+      ""
+    }
+    
+    subsection(title: "Macro overloading") {
+      p ""
+        Multiple macros can have the same name. Arguments will be used to
+        find the macro to call. If more than one macro matches then a
+        compiler error will occur.
+      ""
+      
+      example ""
+        macro p with g : generator {
+          node p {
+            include g
+          }
+        }
+        
+        macro p with s : string {
+          node p s
+        }
+        
+        p {
+          node span "This will call the top p macro"
+        }
+        
+        p {
+          node span "This will call the bottom p macro"
+        }
+      ""
+    }
+    
+    subsection(title: "Generics") {
+      p ""
+        Generics are supported in Glimpse in a similar way to Java.
+      ""
+      
+      example ""
+        Example for generics
+      ""
+    }
+    
+    subsection(title: "Foreach") {
+      p ""
+        Foreach is supported
+      ""
+      
+      example ""
+        Example
+      ""
+    }
+    
+    subsection(title: "Static property references") {
+      p ""
+        TODO
+      ""
+      
+      example ""
+        Example
+      ""
+    }
+    
+    subsection(title: "if/else") {
+      p ""
+        TODO
+      ""
+      
+      example ""
+        Example
+      ""
+    }
+    
+    subsection(title: "Basic type inference") {
+      p "Glimpse supports very basic type inference when declaring variables."
+      p ""
+        The inference will assume that the variable takes the type of whatever
+        is being assigned to it.
+      ""
+      
+      example ""
+        var name = "someString"
+        name = 5 // This won't compile as name is a string and 5 is not a string
+      ""
+    }
+    
+    subsection(title: "Tidy multi-line strings") {
+      p "Multi-line strings are supported in a way that handles indentation."
+      
+      example ""
+        var name = &quot;&quot;
+          This string is over several lines.
+          However, it has no leading spaces until the very last line.
+          This allows you to add indentation if you want but doesn't create
+              messy code :)
+        &quot;&quot;
+      ""
+    }
+    
+    subsection(title: "Dynamic macros") {
+      p "Multi-line strings are supported in a way that handles indentation."
+      
+      example ""
+        var name = &quot;&quot;
+          This string is over several lines.
+          However, it has no leading spaces until the very last line.
+          This allows you to add indentation if you want but doesn't create
+              messy code :)
+        &quot;&quot;
       ""
     }
   }

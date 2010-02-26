@@ -78,7 +78,7 @@
 /* Second line */
 .syntaxhighlighter .line.alt2
 {
-	background-color: #F8F8F8 !important;
+	background-color: #e8e8e8 !important;
 }
 
 .syntaxhighlighter .toolbar
@@ -121,7 +121,7 @@
 .syntaxhighlighter .keyword
 { 
 	color: #069 !important; 
-	font-weight: bold !important; 
+	font-weight: normal !important; 
 }
 
 .syntaxhighlighter .preprocessor 
@@ -131,7 +131,7 @@
 
 .syntaxhighlighter .variable 
 { 
-	color: #a70 !important; 
+	color: #d70 !important; 
 }
 
 .syntaxhighlighter .value

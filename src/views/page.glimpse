@@ -14,8 +14,8 @@ macro page(title : string) with g : generator {
       script(type: "text/javascript") "glimpse.js"
       script(type: "text/javascript") "syntaxhighlighter/js/shcore.js"
       script(type: "text/javascript") "syntaxhighlighter/js/shbrushjava.js"
-
     }
+    
     node body {
       div(class: "content") {
         node h1 title

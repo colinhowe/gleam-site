@@ -27,27 +27,27 @@
  * You should have received a copy of the GNU General Public License
  * along with SyntaxHighlighter.  If not, see <http://www.gnu.org/copyleft/lesser.html>.
  */
-SyntaxHighlighter.brushes.Java = function()
-{
-	var keywords =	'macro with node abstract assert boolean break byte case catch char class const ' +
-					'continue default do double else enum extends ' +
-					'false final finally float for goto if implements import ' +
-					'instanceof int interface long native new null ' +
-					'package private protected public return ' +
-					'short static strictfp super switch synchronized this throw throws true ' +
-					'transient try void volatile while';
+ 
+    
+SyntaxHighlighter.brushes.Java = function() {
+  function thirdMatch(match, regexInfo) {
+    return [new SyntaxHighlighter.Match(match[2], match.index + match[1].length, regexInfo.css)];
+  };
+  
+  function secondMatch(match, regexInfo) {
+    return [new SyntaxHighlighter.Match(match[1], match.index, regexInfo.css)];
+  };
+  
+	var keywords =	'macro with node cascade var';
 
 	this.regexList = [
 		{ regex: SyntaxHighlighter.regexLib.singleLineCComments,	css: 'comments' },		// one line comments
+    { regex: /(""(([^"])|("[^"]))*"")|("[^"\n\r]+")/gm,   css: 'string' },    // strings
 		{ regex: /\/\*([^\*][\s\S]*)?\*\//gm,						css: 'comments' },	 	// multiline comments
-		{ regex: /\/\*(?!\*\/)\*[\s\S]*?\*\//gm,					css: 'preprocessor' },	// documentation comments
-		{ regex: SyntaxHighlighter.regexLib.doubleQuotedString,		css: 'string' },		// strings
-		{ regex: SyntaxHighlighter.regexLib.singleQuotedString,		css: 'string' },		// strings
 		{ regex: /\b([\d]+(\.[\d]+)?|0x[a-f0-9]+)\b/gi,				css: 'value' },			// numbers
-		{ regex: /: [a-zA-Z0-9]+/,				css: 'value' },			// numbers
-		{ regex: /(?!\@interface\b)\@[\$\w]+\b/g,					css: 'color1' },		// annotation @anno
-		{ regex: /\@interface\b/g,									css: 'color2' },		// @interface keyword
-		{ regex: new RegExp(this.getKeywords(keywords), 'gm'),		css: 'keyword' }		// java keyword
+		{ regex: /([a-zA-Z0-9]+)\s*: /gm,				css: 'variable', func: secondMatch },			// parameter names
+		{ regex: new RegExp(this.getKeywords(keywords), 'gm'),		css: 'keyword' },		// java keyword
+    { regex: /top level|restrict to/gm,    css: 'keyword' },    // java keyword
 		];
 
 	this.forHtmlScript({

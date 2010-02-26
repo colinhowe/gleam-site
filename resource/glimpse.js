@@ -3,7 +3,7 @@ $(document).ready(function() {
   $(".example div").hide();
 
   $(".example a").click(function() {
-    $(this).siblings("div").slideToggle("fast");
+    $(this).siblings("div").toggle();
     var find = '+';
     var replace = '-';
     if ($(this).text().indexOf('+') == -1) {
