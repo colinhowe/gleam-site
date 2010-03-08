@@ -6,9 +6,9 @@ macro page(title : string) with g : generator {
   node html {
     node head {
       node title title
-      link(rel: "text/css", type: "stylesheet") "glimpse.css"
-      link(rel: "text/css", type: "stylesheet") "syntaxhighlighter/css/shcore.css"
-      link(rel: "text/css", type: "stylesheet") "syntaxhighlighter/css/shthemedefault.css"
+      link(type: "text/css", rel: "stylesheet") "glimpse.css"
+      link(type: "text/css", rel: "stylesheet") "syntaxhighlighter/css/shcore.css"
+      link(type: "text/css", rel: "stylesheet") "syntaxhighlighter/css/shthemedefault.css"
       
       script(type: "text/javascript") "jquery.js"
       script(type: "text/javascript") "glimpse.js"
@@ -31,6 +31,8 @@ macro page(title : string) with g : generator {
           a(href: "features") "Features"
           span " &bull; "
           a(href: "examples") "Examples"
+          span " &bull; "
+          a(href: "usepatterns") "Use Patterns"
         }
         div(class: "contents") {
           include g

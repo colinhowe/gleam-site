@@ -3,7 +3,7 @@ $(document).ready(function() {
   $(".example div").hide();
 
   $(".example a").click(function() {
-    $(this).siblings("div").toggle();
+    $(this).siblings("div").slideToggle('fast');
     var find = '+';
     var replace = '-';
     if ($(this).text().indexOf('+') == -1) {
@@ -11,6 +11,7 @@ $(document).ready(function() {
       replace = '+';
     }
     $(this).text($(this).text().replace(find, replace));
+    return false;
   });
   
   SyntaxHighlighter.defaults['gutter'] = false;

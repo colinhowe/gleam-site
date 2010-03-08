@@ -100,37 +100,80 @@ page(title: "Glimpse - Features") {
       ""
       
       example ""
-        Example for generics
+        macro result_set&lt;T&gt;(list : java.util.List&lt;T&gt;) with g : generator(row : T) {
+          for (T t in list) {
+            include g(row: t)
+          }
+        }
+        
+        result_set(list: c.people) { person : Person =&gt;
+          span person.name
+        }
       ""
     }
     
-    subsection(title: "Foreach") {
+    subsection(title: "Iteration") {
       p ""
-        Foreach is supported
+        Iteration using a for-each style is catered for.
       ""
       
       example ""
-        Example
+        for (Person person in c.people) {
+          span "Name: "
+          span person.name
+        }
       ""
     }
     
+    subsection(title: "Controllers") {
+      p ""
+        Controllers are the only way of passing data in to a view. This allows
+        the view to reference properties on a controller in a type safe manner.
+      ""
+      
+      example ""
+        controller uk.co.colinhowe.example.WikiPageController
+        
+        span "Page name: "
+        span c.pageName // Note this calls the controller's getPageName() method
+      ""
+    }
+
     subsection(title: "Static property references") {
       p ""
-        TODO
+        Static property references allow you to generate a reference to a 
+        bean on a view's controller. This then gives you access to not only
+        the value of the bean but also the path of the bean in relation to
+        the controller.
       ""
       
       example ""
-        Example
+        controller uk.co.colinhowe.example.SignupController
+        
+        macro field(field : ref) with label : string {
+          node span label
+          node input(id: p.path) p.value
+          // This will create an input text box that uses the path
+          // of the bean as the ID
+        }
+        
+        // Note, we don't use get/set here, Glimpse will figure this out
+        field(p: @c.name) "Name"
       ""
     }
     
     subsection(title: "if/else") {
       p ""
-        TODO
+        Basic if/else expressions are supported.
       ""
       
       example ""
-        Example
+        var condition = true
+        if (condition) {
+          h1 "Condition was true"
+        } else {
+          h1 "Condition was false"
+        }
       ""
     }
     
@@ -151,7 +194,7 @@ page(title: "Glimpse - Features") {
       p "Multi-line strings are supported in a way that handles indentation."
       
       example ""
-        var name = &quot;&quot;
+        p &quot;&quot;
           This string is over several lines.
           However, it has no leading spaces until the very last line.
           This allows you to add indentation if you want but doesn't create
@@ -161,15 +204,39 @@ page(title: "Glimpse - Features") {
     }
     
     subsection(title: "Dynamic macros") {
-      p "Multi-line strings are supported in a way that handles indentation."
+      p ""
+        Dynamic macros allow for macro implementations to be switched at run time.
+        This can be useful in various scenarios. For example, you could specify a
+        table macro that takes a list as a parameter and then takes a generator to
+        be called multiple times that defines only the columns.
+      ""
       
+      code ""
+        table(items: c.people) { person : Person =&gt;
+          col(name: "name") person.name
+          col(name: "age") person.age
+        }
+      ""
+      
+      p ""
+        In the above example the table macro would invoke the generator once
+        with the col macro set to something that outputs headings. Then it
+        would iterate over each person with the col macro set to output individual
+        cells in the table.
+      ""
       example ""
-        var name = &quot;&quot;
-          This string is over several lines.
-          However, it has no leading spaces until the very last line.
-          This allows you to add indentation if you want but doesn't create
-              messy code :)
-        &quot;&quot;
+        dynamic macro field with string s
+        macro field1 with string s {
+          node field1 s
+        }
+        macro field2 with string s {
+          node field2 s
+        }
+        field = field1
+        field "A"
+        field = field2
+        field "B"
+        // The above would output two nodes, field1 and then field2
       ""
     }
   }

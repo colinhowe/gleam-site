@@ -38,7 +38,7 @@ SyntaxHighlighter.brushes.Java = function() {
     return [new SyntaxHighlighter.Match(match[1], match.index, regexInfo.css)];
   };
   
-	var keywords =	'macro with node cascade var';
+	var keywords =	'macro with node cascade var dynamic controller for in include c\\.';
 
 	this.regexList = [
 		{ regex: SyntaxHighlighter.regexLib.singleLineCComments,	css: 'comments' },		// one line comments
@@ -48,6 +48,7 @@ SyntaxHighlighter.brushes.Java = function() {
 		{ regex: /([a-zA-Z0-9]+)\s*: /gm,				css: 'variable', func: secondMatch },			// parameter names
 		{ regex: new RegExp(this.getKeywords(keywords), 'gm'),		css: 'keyword' },		// java keyword
     { regex: /top level|restrict to/gm,    css: 'keyword' },    // java keyword
+    { regex: /@/gm,    css: 'keyword' },    // java keyword
 		];
 
 	this.forHtmlScript({

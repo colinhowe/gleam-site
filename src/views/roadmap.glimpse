@@ -9,7 +9,7 @@ page(title: "Glimpse - Roadmap") {
       li "Packages"
       li "File specific macros"
       li "Standard set of HTML macros with appropriate restrictions"
-      li "Tracking of whether a macro is the last in a generator"
+      li "Double dispatch"
       li "Including nodes from a Java function as a method to achieve componentisation"
       li "Value-less macro calls, e.g. br"
     }

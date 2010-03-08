@@ -1,15 +1,13 @@
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -24,6 +22,7 @@ import uk.co.colinhowe.glimpse.CompilationResult;
 import uk.co.colinhowe.glimpse.Node;
 import uk.co.colinhowe.glimpse.View;
 import uk.co.colinhowe.glimpse.compiler.CompilationUnit;
+import uk.co.colinhowe.glimpse.compiler.FileCompilationUnit;
 import uk.co.colinhowe.glimpse.compiler.GlimpseCompiler;
 import Acme.Serve.Serve;
 
@@ -80,6 +79,8 @@ public class RequestProcessor extends HttpServlet {
 
     long startTime = System.currentTimeMillis();
     
+    response.addHeader("Expires", "Fri, 30 Oct 1998 14:19:41 GMT");
+    
     // Locate all the glimpse files
     String requestUri = request.getRequestURI().substring(1);
     if (requestUri.indexOf(".") != -1) {
@@ -90,43 +91,37 @@ public class RequestProcessor extends HttpServlet {
     }
     
     final File viewsFolder = new File(this.getClass().getResource("views/").getFile());
-    final List<File> viewFiles = new LinkedList<File>();
+    final List<CompilationUnit> units = new LinkedList<CompilationUnit>();
     for (final File viewFile : viewsFolder.listFiles()) {
       if (viewFile.getAbsolutePath().endsWith(".glimpse")) {
-        viewFiles.add(viewFile);
+        final String viewName = viewFile.getName().substring(0, viewFile.getName().indexOf(".glimpse"));
+        final String sourceName = viewFile.toString().substring(0, viewsFolder.toString().length());
+        final CompilationUnit unit = 
+          new FileCompilationUnit(viewName, sourceName, viewFile.getAbsolutePath());
+        System.out.println("Saved: " + viewName + " on " + new Date(viewFile.lastModified()));
+        units.add(unit);
       }
-    }
-
-    // Create compilation units for each file
-    final List<CompilationUnit> units = new LinkedList<CompilationUnit>();
-    for (final File viewFile: viewFiles) {
-      final String viewName = viewFile.getName().substring(0, viewFile.getName().indexOf(".glimpse"));
-      final BufferedReader reader = new BufferedReader(new FileReader(viewFile));
-      final StringBuffer source = new StringBuffer();
-      String line;
-      while ((line = reader.readLine()) != null) {
-        source.append(line + "\n");
-      }
-      reader.close();
-      
-      final CompilationUnit unit = new CompilationUnit(viewName, source.toString(), viewFile.getName());
-      units.add(unit);
     }
     
     // Compile all the units
     String result = "";
     try {
-      final GlimpseCompiler compiler = new GlimpseCompiler();
-      
       List<String> classPaths = new LinkedList<String>();
       classPaths.add("../glimpse/bin");
       
-      List<CompilationResult> compilationResults = compiler.compile(units, classPaths);
+      List<CompilationResult> compilationResults = new GlimpseCompiler().compile(units, classPaths);
       
+      boolean hasErrors = false;
       for (CompilationResult compilationResult : compilationResults) {
         for (CompilationError error : compilationResult.getErrors()) {
-          result += compilationResult.getFilename() + ": " + error.toString();
+          hasErrors = true;
+          System.out.println(error.toString());
+          result += compilationResult.getFilename() + ": " + error.toString() + "<br />";
         }
+      }
+      
+      if (hasErrors) {
+        result = "<pre>" + result + "</pre>";
       }
       
       if (result.length() == 0) {
@@ -179,16 +174,20 @@ public class RequestProcessor extends HttpServlet {
     for (Entry<String, Object> attribute : node.getAttributes().entrySet()) {
       attributes.append(" " + attribute.getKey() + "=\"" + attribute.getValue() + "\"");
     }
-    
-    result.append("<" + node.getId() + attributes + ">");
-    if (node.getValue() != null) {
-      result.append(node.getValue().toString());
-    } else {
-      for (final Node childNode : node.getNodes()) {
-        result.append(outputNode(childNode));
+
+    if (node.getValue() != null || node.getNodes() != null) {
+      result.append("<" + node.getId() + attributes + ">");
+      if (node.getValue() != null) {
+        result.append(node.getValue().toString());
+      } else if (node.getNodes() != null) {
+        for (final Node childNode : node.getNodes()) {
+          result.append(outputNode(childNode));
+        }
       }
+      result.append("</" + node.getId() + ">");
+    } else {
+      result.append("<" + node.getId() + attributes + "/>");
     }
-    result.append("</" + node.getId() + ">");
     return result.toString();
   }
 }

@@ -41,7 +41,7 @@ macro div(class : string = " ") with g : generator {
 }
 
 macro link(type : string, rel : string) with s : string {
-  node link(type: type, rel: rel, href: s) " "
+  node link(type: type, rel: rel, href: s)
 }
 
 macro pre with s : string {
