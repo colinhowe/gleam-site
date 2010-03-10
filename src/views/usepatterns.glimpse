@@ -4,9 +4,9 @@ page(title: "Glimpse - Use Patterns") {
       There are two main use patterns to Glimpse
     ""
     
-    ul {
-      li "Straight to HTML"
-      li "Creating semantic trees"
+    list {
+      item "Straight to HTML"
+      item "Creating semantic trees"
     }
     
     subsection(title: "Straight to HTML") {
@@ -46,17 +46,17 @@ page(title: "Glimpse - Use Patterns") {
         output can yield many benefits.
       ""
       
-      ul {
-        li ""
+      list {
+        item ""
           Complex manipulation based on the node tree - perhaps the last row in a table
           of fields should have a special class applied to it for CSS purposes
         ""
         
-        li ""
+        item ""
           Use in testing - this tree could be used to assist with testing pages
         ""
         
-        li ""
+        item ""
           Use of HTML templates - as part of your process of turning the tree into
           a HTML page you could use HTML snippets directly from files provided by
           a designer.

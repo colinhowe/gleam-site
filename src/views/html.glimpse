@@ -8,9 +8,6 @@ node a(href : string) with string
 node p with generator
 node p with string
 
-node ul with generator
-node li with string
-
 node div(class : string = " ") with generator
 
 node link(type : string, rel : string) with string

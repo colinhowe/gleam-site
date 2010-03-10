@@ -24,12 +24,12 @@ page(title: "Glimpse - A View Layer Language") {
         span "Glimpse offers many benefits:"
       }
             
-      ul {
-        li "Static typing"
-        li "Compile time checking to ensure valid structures are produced"
-        li "Increased re-use of design elements"
-        li "Abstraction of design elements away from the page itself"
-        li "Fully compiled - making it very quick"
+      list {
+        item "Static typing"
+        item "Compile time checking to ensure valid structures are produced"
+        item "Increased re-use of design elements"
+        item "Abstraction of design elements away from the page itself"
+        item "Fully compiled - making it very quick"
       }
     }
     
@@ -38,19 +38,26 @@ page(title: "Glimpse - A View Layer Language") {
         span "Sure."
       }
       code ""
-        node p "Hello world!"
+        node text with string
+        text "Hello world!"
       ""
     }
     
     subsection(title: "... something more complex please") {
       code ""
-        macro code with s : string {
-          node pre s
+        // Definitions will normally belong in a few files
+        node h3 with string
+        node p with string
+        macro section(title : string) with contents : string {
+          h3 title
+          p contents
         }
         
-        // This is how the above example is made
-        code &quot;&quot;
-          node p "Hello world!"
+        // Uses of the macros belong in individual views
+        section(title : "Hello world") &quot;&quot;
+          This will output two nodes.
+          A h3 followed by a p ready for output
+          straight to HTML.
         &quot;&quot;
       ""
       

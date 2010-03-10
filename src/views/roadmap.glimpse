@@ -5,13 +5,13 @@ page(title: "Glimpse - Roadmap") {
       planned for addition:
     ""
     
-    ul {
-      li "Packages"
-      li "File specific macros"
-      li "Standard set of HTML macros with appropriate restrictions"
-      li "Double dispatch"
-      li "Including nodes from a Java function as a method to achieve componentisation"
-      li "Value-less macro calls, e.g. br"
+    list {
+      item "Packages"
+      item "File specific macros"
+      item "Standard set of HTML macros with appropriate restrictions"
+      item "Double dispatch"
+      item "Including nodes from a Java function as a method to achieve componentisation"
+      item "Value-less macro calls, e.g. br"
     }
   }
 }

@@ -12,29 +12,6 @@ public class HtmlCreator {
   }
   
   private Map<String, NodeHandler> handlers = new HashMap<String, NodeHandler>();
-
-  
-  private String loadSnippet(String snippetName) {
-    FileInputStream fis = null;
-    try {
-      fis = new FileInputStream("snippets/" + snippetName + ".html");
-      int numberBytes = fis.available();
-      byte bytearray[] = new byte[numberBytes];
-  
-      fis.read(bytearray);
-      return new String(bytearray);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    } finally {
-      if (fis != null) {
-        try {
-          fis.close();
-        } catch (IOException e) {
-          throw new RuntimeException(e);
-        }
-      }
-    }
-  }
   
   public HtmlCreator() {
     
@@ -43,7 +20,7 @@ public class HtmlCreator {
         StringBuilder subBuilder = new StringBuilder();
         generate(node.getNodes(), subBuilder);
 
-        builder.append(String.format(loadSnippet("page"), node.getAttribute("title"), subBuilder.toString()));
+        builder.append(String.format(SnippetProvider.loadSnippet("page").getContents(), node.getAttribute("title"), subBuilder.toString()));
       }
     });
     
@@ -52,7 +29,7 @@ public class HtmlCreator {
         StringBuilder subBuilder = new StringBuilder();
         generate(node.getNodes(), subBuilder);
 
-        builder.append(String.format(loadSnippet("content"), node.getAttribute("title"), subBuilder.toString()));
+        builder.append(String.format(SnippetProvider.loadSnippet("content").getContents(), node.getAttribute("title"), subBuilder.toString()));
       }
     });
     
@@ -61,7 +38,7 @@ public class HtmlCreator {
         StringBuilder subBuilder = new StringBuilder();
         generate(node.getNodes(), subBuilder);
 
-        builder.append(String.format(loadSnippet("section"), node.getAttribute("title"), subBuilder.toString()));
+        builder.append(String.format(SnippetProvider.loadSnippet("section").getContents(), node.getAttribute("title"), subBuilder.toString()));
       }
     });
     
@@ -70,7 +47,7 @@ public class HtmlCreator {
         StringBuilder subBuilder = new StringBuilder();
         generate(node.getNodes(), subBuilder);
 
-        builder.append(String.format(loadSnippet("subsection"), node.getAttribute("title"), subBuilder.toString()));
+        builder.append(String.format(SnippetProvider.loadSnippet("subsection").getContents(), node.getAttribute("title"), subBuilder.toString()));
       }
     });
     
@@ -103,7 +80,22 @@ public class HtmlCreator {
         StringBuilder subBuilder = new StringBuilder();
         generate(node.getNodes(), subBuilder);
 
-        builder.append(String.format(loadSnippet("subsection"), node.getAttribute("title"), subBuilder.toString()));
+        builder.append(String.format(SnippetProvider.loadSnippet("subsection").getContents(), node.getAttribute("title"), subBuilder.toString()));
+      }
+    });
+    
+    handlers.put("list", new NodeHandler() {
+      public void handle(Node node, StringBuilder builder) {
+        StringBuilder subBuilder = new StringBuilder();
+        generate(node.getNodes(), subBuilder);
+
+        builder.append("<ul>" + subBuilder.toString() + "</ul>");
+      }
+    });
+    
+    handlers.put("item", new NodeHandler() {
+      public void handle(Node node, StringBuilder builder) {
+        builder.append("<li>" + node.getValue() + "</li>");
       }
     });
     
@@ -115,7 +107,13 @@ public class HtmlCreator {
     
     handlers.put("code", new NodeHandler() {
       public void handle(Node node, StringBuilder builder) {
-        builder.append(String.format(loadSnippet("code"), node.getValue()));
+        builder.append(String.format(SnippetProvider.loadSnippet("code").getContents(), node.getValue()));
+      }
+    });
+    
+    handlers.put("example", new NodeHandler() {
+      public void handle(Node node, StringBuilder builder) {
+        builder.append(String.format(SnippetProvider.loadSnippet("example").getContents(), node.getValue()));
       }
     });
     
@@ -132,15 +130,17 @@ public class HtmlCreator {
         int i = 0;
         StringBuilder subBuilder = new StringBuilder();
         for (Node menuItem : node.getNodes()) {
-          if (i == node.getNodes().size()) {
-            subBuilder.append(String.format(loadSnippet("menuitem-last"), 
-                node.getAttribute("target"), node.getValue()));
-          } else {
-            subBuilder.append(String.format(loadSnippet("menuitem"), 
-                node.getAttribute("target"), node.getValue()));
-          }
           i++;
+          if (i == node.getNodes().size()) {
+            subBuilder.append(String.format(SnippetProvider.loadSnippet("menuitem-last").getContents(), 
+                menuItem.getAttribute("target"), menuItem.getValue()));
+          } else {
+            subBuilder.append(String.format(SnippetProvider.loadSnippet("menuitem").getContents(), 
+                menuItem.getAttribute("target"), menuItem.getValue()));
+          }
         }
+        
+        builder.append(String.format(SnippetProvider.loadSnippet("menu").getContents(), subBuilder.toString()));
       }
     });
   }

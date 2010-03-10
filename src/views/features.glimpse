@@ -4,9 +4,11 @@ page(title: "Glimpse - Features") {
       p "Macros allow for the re-use of basic building blocks"
       
       example ""
+        node h3 with string
+        node pre with string
         macro code with s : string {
-          node h3 "Code"
-          node pre s
+          h3 "Code"
+          pre s
         }
         
         code &quot;&quot;
@@ -15,21 +17,19 @@ page(title: "Glimpse - Features") {
       ""
     }
     
-    subsection(title: "Macro Restrictions") {
+    subsection(title: "Macro/Node Restrictions") {
       p ""
         Restrict macros so that they can only be called within macros with
         certain names.
       ""
       
       example ""
+        node h3 with string
+        node p with string restrict to section
         macro section(title : string) with g : generator 
             restrict to top level {
-          node h3 s
+          h3 s
         }
-        
-        macro p with s : string restrict to section {
-          node p s
-        } 
         
         section(title: "Welcome") {
           p "Welcome to my page!"
@@ -47,15 +47,8 @@ page(title: "Glimpse - Features") {
       ""
       
       example ""
-        macro form(cascade readonly : boolean) with g : generator {
-          node div {
-            include g
-          }
-        }
-        
-        macro textinput(id : string, readonly : boolean) with label : string {
-          node input(name: id, readonly: readonly) label
-        }
+        node form(cascade readonly : boolean) with generator
+        node textinput(id : string, readonly : boolean) with string
         
         form(readonly: true) {
           // readonly: true will be passed into the call to textinput
@@ -74,23 +67,25 @@ page(title: "Glimpse - Features") {
       ""
       
       example ""
+        node span with string
+        node p with generator
         macro p with g : generator {
-          node p {
+          node p { // Specify that the node should be called and not the macro
+            span "top called!"
             include g
           }
         }
         
         macro p with s : string {
-          node p s
+          span s
+          span "bottom called!"
         }
         
         p {
-          node span "This will call the top p macro"
+          span "This will call the top p macro"
         }
         
-        p {
-          node span "This will call the bottom p macro"
-        }
+        p "This will call the bottom p macro"
       ""
     }
     
