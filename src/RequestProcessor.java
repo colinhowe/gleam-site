@@ -144,11 +144,8 @@ public class RequestProcessor extends HttpServlet {
       
           final Object controller = new DummyController();
           final List<Node> nodes = view.view(controller);
-          final StringBuilder output = new StringBuilder();
-          for (final Node node : nodes) {
-            output.append(outputNode(node));
-          }
-          result = output.toString();
+          
+          result = new HtmlCreator().generate(nodes);
         }
       }
     } catch (Throwable e) {

@@ -1,6 +1,2 @@
-macro example with s : string {
-  div(class: "example") {
-    a(href: "#") "+ Quick example"
-    code s
-  }
-}
+node code with string
+node example with string

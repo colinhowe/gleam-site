@@ -1,48 +1,49 @@
 controller DummyController
 
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
-node p c.names
+node p with string
+
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name
+p c.name

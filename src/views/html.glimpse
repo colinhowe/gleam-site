@@ -1,53 +1,20 @@
-macro h2 with s : string {
-  node h2 s
-} 
+node h2 with string
+node h3 with string
 
-macro h3 with s : string {
-  node h3 s
-} 
+node span with string
 
-macro span with s : string {
-  node span s
-}
+node a(href : string) with string
 
-macro a(href : string) with s : string {
-  node a(href: href) s
-}
+node p with generator
+node p with string
 
-macro p with g : generator {
-  node p {
-    include g
-  }
-}
+node ul with generator
+node li with string
 
-macro p with s : string {
-  node p s
-}
+node div(class : string = " ") with generator
 
-macro ul with g : generator {
-  node ul {
-    include g
-  }
-}
+node link(type : string, rel : string) with string
 
-macro li with s : string {
-  node li s
-}
+node pre with string
 
-macro div(class : string = " ") with g : generator {
-  node div(class: class) {
-    include g
-  }
-}
-
-macro link(type : string, rel : string) with s : string {
-  node link(type: type, rel: rel, href: s)
-}
-
-macro pre with s : string {
-  node pre s
-}
-
-macro script(type : string) with s : string {
-  node script(type: type, src: s) " "
-}
+node script(type : string, src : string)

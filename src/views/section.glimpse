@@ -1,9 +1,2 @@
-macro section(title: string) with g : generator {
-  h2 title
-  include g
-}
-
-macro subsection(title: string) with g : generator {
-  h3 title
-  include g
-}
+node section(title: string) with generator
+node subsection(title: string) with generator

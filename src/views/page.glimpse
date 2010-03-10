@@ -1,43 +1,33 @@
-macro script with code : string {
-  node script(type: "text/javascript") code
+macro script with scode : string {
+  script(type: "text/javascript") scode
 }
 
+node menu_item(target: string) with string 
+
+node menu with generator
+
+macro page_menu {
+  menu {
+    menu_item(target: "roadmap") "Roadmap"
+    menu_item(target: "antifeatures") "Anti-features"
+    menu_item(target: "quickstart") "Quick start"
+    menu_item(target: "features") "Features"
+    menu_item(target: "examples") "Examples"
+    menu_item(target: "usepatterns") "Use Patterns"
+  }
+}
+
+node content(title: string) with generator
+
+node page_node(title: string) with generator
+
 macro page(title : string) with g : generator {
-  node html {
-    node head {
-      node title title
-      link(type: "text/css", rel: "stylesheet") "glimpse.css"
-      link(type: "text/css", rel: "stylesheet") "syntaxhighlighter/css/shcore.css"
-      link(type: "text/css", rel: "stylesheet") "syntaxhighlighter/css/shthemedefault.css"
-      
-      script(type: "text/javascript") "jquery.js"
-      script(type: "text/javascript") "glimpse.js"
-      script(type: "text/javascript") "syntaxhighlighter/js/shcore.js"
-      script(type: "text/javascript") "syntaxhighlighter/js/shbrushjava.js"
-    }
-    
-    node body {
-      div(class: "content") {
-        node h1 title
-        div(class: "links") {
-          a(href: "index") "Home"
-          span " &bull; "
-          a(href: "roadmap") "Roadmap"
-          span " &bull; "
-          a(href: "antifeatures") "Anti-features"
-          span " &bull; "
-          a(href: "quickstart") "Quick start"
-          span " &bull; "
-          a(href: "features") "Features"
-          span " &bull; "
-          a(href: "examples") "Examples"
-          span " &bull; "
-          a(href: "usepatterns") "Use Patterns"
-        }
-        div(class: "contents") {
-          include g
-        }
-      }
+  page_node(title: title) {
+    page_menu
+    content(title: title) {
+      include g
     }
   }
 }
+
+node script(type : string) with string restrict to script

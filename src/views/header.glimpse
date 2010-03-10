@@ -1,7 +1,2 @@
-macro header with s : string {
-  h2 s
-}
-
-macro subheader with s : string {
-  h3 s
-}
+node header with string
+node subheader with string

@@ -1,5 +1,0 @@
-macro code with s : string {
-  div {
-    node pre(class: "brush: java") s
-  }
-}

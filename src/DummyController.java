@@ -7,6 +7,10 @@ public class DummyController {
   public List<String> getNames() {
     return names;
   }
+  
+  public String getName() {
+    return "DummyController";
+  }
 
   public DummyController() {
     names = new LinkedList<String>();
