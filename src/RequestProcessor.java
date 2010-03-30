@@ -1,4 +1,5 @@
 import java.io.BufferedWriter;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,6 +13,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Map;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,7 +30,53 @@ import uk.co.colinhowe.glimpse.compiler.FileCompilationUnit;
 import uk.co.colinhowe.glimpse.compiler.GlimpseCompiler;
 import Acme.Serve.Serve;
 
+@SuppressWarnings("serial")
 public class RequestProcessor extends HttpServlet {
+  
+  private boolean developerMode = false;
+  
+  /**
+   * Compiles the views.
+   * 
+   * @return A string containing the errors ready to be output.
+   */
+  private String compile() {
+    String result = "";
+    final File viewsFolder = new File(this.getClass().getResource("views/").getFile());
+    final List<CompilationUnit> units = new LinkedList<CompilationUnit>();
+    for (final File viewFile : viewsFolder.listFiles()) {
+      if (viewFile.getAbsolutePath().endsWith(".glimpse")) {
+        final String viewName = viewFile.getName().substring(0, viewFile.getName().indexOf(".glimpse"));
+        final String sourceName = viewFile.toString().substring(0, viewsFolder.toString().length());
+        final CompilationUnit unit = 
+          new FileCompilationUnit(viewName, sourceName, viewFile.getAbsolutePath());
+        System.out.println("Saved: " + viewName + " on " + new Date(viewFile.lastModified()));
+        units.add(unit);
+      }
+    }
+  
+    // Compile all the units
+    List<String> classPaths = new LinkedList<String>();
+    classPaths.add("../glimpse/bin");
+    
+    List<CompilationResult> compilationResults = new GlimpseCompiler().compile(units, classPaths);
+    
+    boolean hasErrors = false;
+    for (CompilationResult compilationResult : compilationResults) {
+      for (CompilationError error : compilationResult.getErrors()) {
+        hasErrors = true;
+        System.out.println(error.toString());
+        result += compilationResult.getFilename() + ": " + error.toString() + "<br />";
+      }
+    }
+    
+    if (hasErrors) {
+      result = "<pre>" + result + "</pre>";
+    }
+    
+    return result;
+  }
+  
   public static void main(String[] args) {
     // setting properties for the server, and exchangable Acceptors
     java.util.Properties properties = new java.util.Properties();
@@ -50,6 +99,10 @@ public class RequestProcessor extends HttpServlet {
       }
     }));
     srv.serve();
+  }
+  
+  RequestProcessor() {
+    compile();
   }
   
   private byte[] readFile(String filename) throws FileNotFoundException {
@@ -78,7 +131,25 @@ public class RequestProcessor extends HttpServlet {
     }
   }
   
+  final Map<String, View> viewCache = new HashMap<String, View>();
   @SuppressWarnings("deprecation")
+  private View getView(String viewName) {
+    if (!developerMode && viewCache.containsKey(viewName)) {
+      return viewCache.get(viewName);
+    }
+    
+    try {
+      final ClassLoader classLoader = new URLClassLoader(new URL[] { new File("temp/").toURL() });
+      final Class<?> viewClazz;
+      viewClazz = classLoader.loadClass(viewName);
+      View view = (View)viewClazz.newInstance();
+      viewCache.put(viewName, view);
+      return view;
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to instantiate view", e);
+    }
+  }
+  
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -99,61 +170,20 @@ public class RequestProcessor extends HttpServlet {
       return;
     }
     
-    final File viewsFolder = new File(this.getClass().getResource("views/").getFile());
-    final List<CompilationUnit> units = new LinkedList<CompilationUnit>();
-    for (final File viewFile : viewsFolder.listFiles()) {
-      if (viewFile.getAbsolutePath().endsWith(".glimpse")) {
-        final String viewName = viewFile.getName().substring(0, viewFile.getName().indexOf(".glimpse"));
-        final String sourceName = viewFile.toString().substring(0, viewsFolder.toString().length());
-        final CompilationUnit unit = 
-          new FileCompilationUnit(viewName, sourceName, viewFile.getAbsolutePath());
-        System.out.println("Saved: " + viewName + " on " + new Date(viewFile.lastModified()));
-        units.add(unit);
-      }
-    }
-    
-    // Compile all the units
     String result = "";
+    
+    
     try {
-      List<String> classPaths = new LinkedList<String>();
-      classPaths.add("../glimpse/bin");
-      
-      List<CompilationResult> compilationResults = new GlimpseCompiler().compile(units, classPaths);
-      
-      boolean hasErrors = false;
-      for (CompilationResult compilationResult : compilationResults) {
-        for (CompilationError error : compilationResult.getErrors()) {
-          hasErrors = true;
-          System.out.println(error.toString());
-          result += compilationResult.getFilename() + ": " + error.toString() + "<br />";
-        }
-      }
-      
-      if (hasErrors) {
-        result = "<pre>" + result + "</pre>";
+      if (developerMode) {
+        result = compile();
       }
       
       if (result.length() == 0) {
         
-        final ClassLoader classLoader = new URLClassLoader(new URL[] { new File("temp/").toURL() });
-        final Class<?> viewClazz;
-        try {
-          viewClazz = classLoader.loadClass(request.getRequestURI().substring(1));
-        } catch (ClassNotFoundException e) {
-          throw new RuntimeException("Failed to instantiate view", e);
-        }
-        
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1; i++) {
           final Object controller = new DummyController();
-          final View view;
-          try {
-            view = (View)viewClazz.newInstance();
-          } catch (Exception e) {
-            throw new RuntimeException("Failed to instantiate view", e);
-          }
-      
+          final View view = getView(request.getRequestURI().substring(1));
           final List<Node> nodes = view.view(controller);
-          
           result = new HtmlCreator().generate(nodes);
         }
       }
