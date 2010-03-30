@@ -17,14 +17,14 @@ macro page_menu {
   }
 }
 
-node content(title: string) with generator
+node content with generator
 
 node page_node(title: string) with generator
 
 macro page(title : string) with g : generator {
   page_node(title: title) {
     page_menu
-    content(title: title) {
+    content {
       include g
     }
   }

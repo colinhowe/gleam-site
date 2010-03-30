@@ -38,7 +38,7 @@ SyntaxHighlighter.brushes.Java = function() {
     return [new SyntaxHighlighter.Match(match[1], match.index, regexInfo.css)];
   };
   
-	var keywords =	'macro with node cascade var dynamic controller for in include c\\.';
+	var keywords =	'macro with node cascade var dynamic controller for in include if else c\\.';
 
 	this.regexList = [
 		{ regex: SyntaxHighlighter.regexLib.singleLineCComments,	css: 'comments' },		// one line comments

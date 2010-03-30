@@ -13,8 +13,19 @@ public class HtmlCreator {
   
   private Map<String, NodeHandler> handlers = new HashMap<String, NodeHandler>();
 
+  private static Map<String, String> snippetCache = new HashMap<String, String>();
+  private static long lastCacheRefresh = 0;
   
   private String loadSnippet(String snippetName) {
+    if (System.currentTimeMillis() - lastCacheRefresh > 1000) {
+      snippetCache.clear();
+      lastCacheRefresh = System.currentTimeMillis();
+    }
+    
+    if (snippetCache.containsKey(snippetName)) {
+      return snippetCache.get(snippetName);
+    }
+    
     FileInputStream fis = null;
     try {
       fis = new FileInputStream("snippets/" + snippetName + ".html");
@@ -22,6 +33,7 @@ public class HtmlCreator {
       byte bytearray[] = new byte[numberBytes];
   
       fis.read(bytearray);
+      snippetCache.put(snippetName, new String(bytearray));
       return new String(bytearray);
     } catch (Exception e) {
       throw new RuntimeException(e);
@@ -36,23 +48,39 @@ public class HtmlCreator {
     }
   }
   
+  public Node findNode(List<Node> nodes, String name) {
+    for (Node node : nodes) {
+      if (node.getId().equals(name)) {
+        return node;
+      }
+    }
+    
+    return null;
+  }
+  
   public HtmlCreator() {
     
     handlers.put("page_node", new NodeHandler() {
       public void handle(Node node, StringBuilder builder) {
-        StringBuilder subBuilder = new StringBuilder();
-        generate(node.getNodes(), subBuilder);
+        Node pageMenu = findNode(node.getNodes(), "menu");
+        StringBuilder menuBuilder = new StringBuilder();
+        HtmlCreator.this.generate(pageMenu, menuBuilder);
 
-        builder.append(String.format(loadSnippet("page"), node.getAttribute("title"), subBuilder.toString()));
+        Node content = findNode(node.getNodes(), "content");
+        StringBuilder contentBuilder = new StringBuilder();
+        HtmlCreator.this.generate(content, contentBuilder);
+        
+        builder.append(String.format(loadSnippet("page"), 
+            node.getAttribute("title"), 
+            node.getAttribute("title"), 
+            menuBuilder,
+            contentBuilder));
       }
     });
     
     handlers.put("content", new NodeHandler() {
       public void handle(Node node, StringBuilder builder) {
-        StringBuilder subBuilder = new StringBuilder();
-        generate(node.getNodes(), subBuilder);
-
-        builder.append(String.format(loadSnippet("content"), node.getAttribute("title"), subBuilder.toString()));
+        generate(node.getNodes(), builder);
       }
     });
     
@@ -98,24 +126,30 @@ public class HtmlCreator {
       }
     });
     
-    handlers.put("ul", new NodeHandler() {
+    handlers.put("list", new NodeHandler() {
       public void handle(Node node, StringBuilder builder) {
         StringBuilder subBuilder = new StringBuilder();
         generate(node.getNodes(), subBuilder);
 
-        builder.append(String.format(loadSnippet("subsection"), node.getAttribute("title"), subBuilder.toString()));
+        builder.append("<ul>" + subBuilder + "</ul>");
       }
     });
     
-    handlers.put("li", new NodeHandler() {
+    handlers.put("item", new NodeHandler() {
       public void handle(Node node, StringBuilder builder) {
-        builder.append(node.getValue());
+        builder.append("<li>" + node.getValue() + "</li>");
       }
     });
     
     handlers.put("code", new NodeHandler() {
       public void handle(Node node, StringBuilder builder) {
         builder.append(String.format(loadSnippet("code"), node.getValue()));
+      }
+    });
+    
+    handlers.put("example", new NodeHandler() {
+      public void handle(Node node, StringBuilder builder) {
+        builder.append(String.format(loadSnippet("example"), node.getValue()));
       }
     });
     
@@ -130,17 +164,18 @@ public class HtmlCreator {
         // Go over each menu item and output a snippet with regards
         // to whether it is the last one or not
         int i = 0;
-        StringBuilder subBuilder = new StringBuilder();
+        builder.append("<div>");
         for (Node menuItem : node.getNodes()) {
-          if (i == node.getNodes().size()) {
-            subBuilder.append(String.format(loadSnippet("menuitem-last"), 
-                node.getAttribute("target"), node.getValue()));
+          if (i == node.getNodes().size() - 1) {
+            builder.append(String.format(loadSnippet("menuitem-last"), 
+                menuItem.getAttribute("target"), menuItem.getValue()));
           } else {
-            subBuilder.append(String.format(loadSnippet("menuitem"), 
-                node.getAttribute("target"), node.getValue()));
+            builder.append(String.format(loadSnippet("menuitem"), 
+                menuItem.getAttribute("target"), menuItem.getValue()));
           }
           i++;
         }
+        builder.append("</div>");
       }
     });
   }

@@ -24,12 +24,12 @@ page(title: "Glimpse - A View Layer Language") {
         span "Glimpse offers many benefits:"
       }
             
-      ul {
-        li "Static typing"
-        li "Compile time checking to ensure valid structures are produced"
-        li "Increased re-use of design elements"
-        li "Abstraction of design elements away from the page itself"
-        li "Fully compiled - making it very quick"
+      list {
+        item "Static typing"
+        item "Compile time checking to ensure valid structures are produced"
+        item "Increased re-use of design elements"
+        item "Abstraction of design elements away from the page itself"
+        item "Fully compiled - making it very quick"
       }
     }
     

@@ -23,14 +23,14 @@ page(title: "Glimpse - Anti-features") {
         from Glimpse.
       ""
       
-      ul {
-        li "Most mathematical operations"
-        li "The new keyword from Java/C++"
-        li "Classes - they can be used, just not created"
-        li "Closures"
-        li "Reflection"
-        li "While loops"
-        li "Switch statements"
+      list {
+        item "Most mathematical operations"
+        item "The new keyword from Java/C++"
+        item "Classes - they can be used, just not created"
+        item "Closures"
+        item "Reflection"
+        item "While loops"
+        item "Switch statements"
       }
     }
     
@@ -40,8 +40,8 @@ page(title: "Glimpse - Anti-features") {
         what can be done in a view.
       ""
       
-      ul {
-        li ""
+      list {
+        item ""
           Generators, not closures - generators are very similar to closures but you
           can't pass them around in an ad-hoc manner
         ""
