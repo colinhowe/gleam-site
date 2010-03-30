@@ -1,6 +1,7 @@
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -51,7 +52,7 @@ public class RequestProcessor extends HttpServlet {
     srv.serve();
   }
   
-  private byte[] readFile(String filename) {
+  private byte[] readFile(String filename) throws FileNotFoundException {
     FileInputStream fis = null;
     try {
       fis = new FileInputStream(filename);
@@ -60,8 +61,12 @@ public class RequestProcessor extends HttpServlet {
   
       fis.read(bytearray);
       return bytearray;
-    } catch (Exception e) {
-      throw new RuntimeException(e);
+    } catch (IOException e) {
+      if (e instanceof FileNotFoundException) {
+        throw (FileNotFoundException)e;
+      } else {
+        throw new RuntimeException(e);
+      }
     } finally {
       if (fis != null) {
         try {
@@ -85,8 +90,12 @@ public class RequestProcessor extends HttpServlet {
     String requestUri = request.getRequestURI().substring(1);
     if (requestUri.indexOf(".") != -1) {
       // Get from the resources folder
-      final byte[] contents = readFile("resource/" + requestUri);
-      response.getOutputStream().write(contents);
+      try {
+        final byte[] contents = readFile("resource/" + requestUri);
+        response.getOutputStream().write(contents);
+      } catch (FileNotFoundException e) {
+        System.err.println("Requested missing file [" + e.getMessage() + "]");
+      }
       return;
     }
     
@@ -135,6 +144,7 @@ public class RequestProcessor extends HttpServlet {
         }
         
         for (int i = 0; i < 100; i++) {
+          final Object controller = new DummyController();
           final View view;
           try {
             view = (View)viewClazz.newInstance();
@@ -142,7 +152,6 @@ public class RequestProcessor extends HttpServlet {
             throw new RuntimeException("Failed to instantiate view", e);
           }
       
-          final Object controller = new DummyController();
           final List<Node> nodes = view.view(controller);
           
           result = new HtmlCreator().generate(nodes);
