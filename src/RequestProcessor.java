@@ -21,13 +21,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import uk.co.colinhowe.glimpse.CompilationError;
-import uk.co.colinhowe.glimpse.CompilationResult;
-import uk.co.colinhowe.glimpse.Node;
-import uk.co.colinhowe.glimpse.View;
-import uk.co.colinhowe.glimpse.compiler.CompilationUnit;
-import uk.co.colinhowe.glimpse.compiler.FileCompilationUnit;
-import uk.co.colinhowe.glimpse.compiler.GlimpseCompiler;
+import uk.co.colinhowe.gleam.CompilationError;
+import uk.co.colinhowe.gleam.CompilationResult;
+import uk.co.colinhowe.gleam.Node;
+import uk.co.colinhowe.gleam.View;
+import uk.co.colinhowe.gleam.compiler.CompilationUnit;
+import uk.co.colinhowe.gleam.compiler.FileCompilationUnit;
+import uk.co.colinhowe.gleam.compiler.GlimpseCompiler;
 import Acme.Serve.Serve;
 
 @SuppressWarnings("serial")
@@ -45,8 +45,8 @@ public class RequestProcessor extends HttpServlet {
     final File viewsFolder = new File(this.getClass().getResource("views/").getFile());
     final List<CompilationUnit> units = new LinkedList<CompilationUnit>();
     for (final File viewFile : viewsFolder.listFiles()) {
-      if (viewFile.getAbsolutePath().endsWith(".glimpse")) {
-        final String viewName = viewFile.getName().substring(0, viewFile.getName().indexOf(".glimpse"));
+      if (viewFile.getAbsolutePath().endsWith(".gleam")) {
+        final String viewName = viewFile.getName().substring(0, viewFile.getName().indexOf(".gleam"));
         final String sourceName = viewFile.toString().substring(0, viewsFolder.toString().length());
         final CompilationUnit unit = 
           new FileCompilationUnit(viewName, sourceName, viewFile.getAbsolutePath());
@@ -57,7 +57,7 @@ public class RequestProcessor extends HttpServlet {
   
     // Compile all the units
     List<String> classPaths = new LinkedList<String>();
-    classPaths.add("../glimpse/bin");
+    classPaths.add("../gleam/bin");
     
     List<CompilationResult> compilationResults = new GlimpseCompiler().compile(units, classPaths);
     
@@ -157,7 +157,7 @@ public class RequestProcessor extends HttpServlet {
     
     response.addHeader("Expires", "Fri, 30 Oct 1998 14:19:41 GMT");
     
-    // Locate all the glimpse files
+    // Locate all the gleam files
     String requestUri = request.getRequestURI().substring(1);
     if (requestUri.indexOf(".") != -1) {
       // Get from the resources folder
