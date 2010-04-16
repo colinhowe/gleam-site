@@ -1,3 +1,4 @@
+package gleam.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -5,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SnippetProvider {
-  static class Snippet {
+  public static class Snippet {
     private long lastModified;
     private String contents;
     
@@ -61,7 +62,7 @@ public class SnippetProvider {
     cacheUpdater.start();
   }
   
-  static Snippet loadSnippet(String name) {
+  public static Snippet loadSnippet(String name) {
     return loadSnippet(name, false);
   }
   

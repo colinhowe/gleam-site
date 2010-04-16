@@ -28,6 +28,7 @@ import gleam.View;
 import gleam.compiler.CompilationUnit;
 import gleam.compiler.FileCompilationUnit;
 import gleam.compiler.GleamCompiler;
+import gleam.util.HtmlCreator;
 import Acme.Serve.Serve;
 
 @SuppressWarnings("serial")
