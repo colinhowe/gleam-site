@@ -2,7 +2,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import uk.co.colinhowe.glimpse.Node;
+import gleam.Node;
 
 public class HtmlCreator {
   
@@ -14,7 +14,7 @@ public class HtmlCreator {
   
   public Node findNode(List<Node> nodes, String name) {
     for (Node node : nodes) {
-      if (node.getId().equals(name)) {
+      if (node.getTagName().equals(name)) {
         return node;
       }
     }
@@ -151,10 +151,10 @@ public class HtmlCreator {
   }
   
   public void generate(Node node, StringBuilder builder) {
-    if (handlers.containsKey(node.getId())) {
-      handlers.get(node.getId()).handle(node, builder);
+    if (handlers.containsKey(node.getTagName())) {
+      handlers.get(node.getTagName()).handle(node, builder);
     } else {
-      throw new IllegalStateException("Unrecognised node type [" + node.getId() + "]");
+      throw new IllegalStateException("Unrecognised node type [" + node.getTagName() + "]");
     }
   }
 

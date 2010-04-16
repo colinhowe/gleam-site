@@ -21,13 +21,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import uk.co.colinhowe.gleam.CompilationError;
-import uk.co.colinhowe.gleam.CompilationResult;
-import uk.co.colinhowe.gleam.Node;
-import uk.co.colinhowe.gleam.View;
-import uk.co.colinhowe.gleam.compiler.CompilationUnit;
-import uk.co.colinhowe.gleam.compiler.FileCompilationUnit;
-import uk.co.colinhowe.gleam.compiler.GlimpseCompiler;
+import gleam.CompilationError;
+import gleam.CompilationResult;
+import gleam.Node;
+import gleam.View;
+import gleam.compiler.CompilationUnit;
+import gleam.compiler.FileCompilationUnit;
+import gleam.compiler.GleamCompiler;
 import Acme.Serve.Serve;
 
 @SuppressWarnings("serial")
@@ -59,7 +59,7 @@ public class RequestProcessor extends HttpServlet {
     List<String> classPaths = new LinkedList<String>();
     classPaths.add("../gleam/bin");
     
-    List<CompilationResult> compilationResults = new GlimpseCompiler().compile(units, classPaths);
+    List<CompilationResult> compilationResults = new GleamCompiler().compile(units, classPaths);
     
     boolean hasErrors = false;
     for (CompilationResult compilationResult : compilationResults) {
@@ -212,7 +212,7 @@ public class RequestProcessor extends HttpServlet {
     }
 
     if (node.getValue() != null || node.getNodes() != null) {
-      result.append("<" + node.getId() + attributes + ">");
+      result.append("<" + node.getTagName() + attributes + ">");
       if (node.getValue() != null) {
         result.append(node.getValue().toString());
       } else if (node.getNodes() != null) {
@@ -220,9 +220,9 @@ public class RequestProcessor extends HttpServlet {
           result.append(outputNode(childNode));
         }
       }
-      result.append("</" + node.getId() + ">");
+      result.append("</" + node.getTagName() + ">");
     } else {
-      result.append("<" + node.getId() + attributes + "/>");
+      result.append("<" + node.getTagName() + attributes + "/>");
     }
     return result.toString();
   }
