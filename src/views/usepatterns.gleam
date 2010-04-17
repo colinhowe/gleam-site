@@ -1,7 +1,7 @@
-page(title: "Glimpse - Use Patterns") {
+page(title: "Use Patterns") {
   section(title: "Use Patterns") {
     p ""
-      There are two main use patterns to Glimpse
+      There are two main use patterns to Gleam
     ""
     
     list {
@@ -11,7 +11,7 @@ page(title: "Glimpse - Use Patterns") {
     
     subsection(title: "Straight to HTML") {
       p ""
-        You can use Glimpse to build a HTML node tree directly. This can then be
+        You can use Gleam to build a HTML node tree directly. This can then be
         turned into a string and sent out as a page without much thought.
       ""
       
@@ -20,7 +20,7 @@ page(title: "Glimpse - Use Patterns") {
       ""
       
       p ""
-        Using Glimpse in this manner doesn't make it difficult to later switch to...
+        Using Gleam in this manner doesn't make it difficult to later switch to...
       ""
     }
     
@@ -64,7 +64,7 @@ page(title: "Glimpse - Use Patterns") {
       }
       
       p ""
-        When used like this you can think of Glimpse as a technology that allows you
+        When used like this you can think of Gleam as a technology that allows you
         to create an API that can be used in a safe and consistent way.
       ""
     }

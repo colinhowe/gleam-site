@@ -1,7 +1,7 @@
-page(title: "Glimpse - Roadmap") {
+page(title: "Roadmap") {
   section(title: "Roadmap") {
     p ""
-      Glimpse is very young. There is lots still to do and here is what is currently
+      Gleam is very young. There is lots still to do and here is what is currently
       planned for addition:
     ""
     

@@ -1,4 +1,4 @@
-page(title: "Glimpse - Features") {
+page(title: "Features") {
   section(title: "Features") {
     subsection(title: "Macros") {
       p "Macros allow for the re-use of basic building blocks"
@@ -91,7 +91,7 @@ page(title: "Glimpse - Features") {
     
     subsection(title: "Generics") {
       p ""
-        Generics are supported in Glimpse in a similar way to Java.
+        Generics are supported in Gleam in a similar way to Java.
       ""
       
       example ""
@@ -152,7 +152,7 @@ page(title: "Glimpse - Features") {
           // of the bean as the ID
         }
         
-        // Note, we don't use get/set here, Glimpse will figure this out
+        // Note, we don't use get/set here, Gleam will figure this out
         field(p: @c.name) "Name"
       ""
     }
@@ -173,7 +173,7 @@ page(title: "Glimpse - Features") {
     }
     
     subsection(title: "Basic type inference") {
-      p "Glimpse supports very basic type inference when declaring variables."
+      p "Gleam supports very basic type inference when declaring variables."
       p ""
         The inference will assume that the variable takes the type of whatever
         is being assigned to it.
