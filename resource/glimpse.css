@@ -5,17 +5,50 @@ body, html, head {
 }
 
 body {
-  font-size: 1.0em;
+  font-size: 12px;
 }
 
 h1 { 
+  padding: 10px;
+  width: 770px;
+  font-size: 50px;
+  color: #293154;
+  border-bottom: 1px solid #eee4c6;
   margin: 0;
-  padding: 10px 0;
 }
 
-h2, h3 {
-  padding: 50px 0 10px 0;
+h2 {
+  margin-top: 30px;
+  margin-bottom: 20px;
+  padding: 0 30px;
+  font-size: 24px;
+}
+
+.menu {
+  border-bottom: solid 1px #eee4c6;
+  background-color: #fff;
+  color: #293154;
+  padding: 10px 0;
+  padding-left: 10px;
+}
+
+.menu a {
+  color: #293154;
+}
+
+h3 {
+  padding: 30px 0 20px 0;
   margin: 0;
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 14px;
+  margin: 0;
+}
+
+.subsection {
+  padding-bottom: 20px;
 }
 
 p {
@@ -23,15 +56,18 @@ p {
 }
 
 body {
-  background-color: #e0e0e0;
+  background-color: #788ca6;
 }
 
 .content {
+  padding: 0 30px 30px 30px;
+}
+
+.middle {
   background-color: #ffffff;
-  width: 800px;
+  width: 790px;
   margin: 15px auto;
-  padding: 50px;
-  border: 3px #808080 solid;
+  padding: 5px;
 }
 
 pre {
@@ -44,4 +80,10 @@ pre {
 
 .example a {
   display: none;
+}
+
+.footer {
+  padding: 0 30px 0px 30px;
+  font-size: 10px;
+  text-align: right;
 }

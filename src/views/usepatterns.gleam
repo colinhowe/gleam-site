@@ -1,14 +1,16 @@
 page(title: "Use Patterns") {
   section(title: "Use Patterns") {
-    p ""
-      There are two main use patterns to Gleam
-    ""
-    
-    list {
-      item "Straight to HTML"
-      item "Creating semantic trees"
+    leading_section {
+      p ""
+        There are two main use patterns to Gleam
+      ""
+      
+      list {
+        item "Straight to HTML"
+        item "Creating semantic trees"
+      }
     }
-    
+        
     subsection(title: "Straight to HTML") {
       p ""
         You can use Gleam to build a HTML node tree directly. This can then be

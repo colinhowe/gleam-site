@@ -1,19 +1,150 @@
 page(title: "Features") {
   section(title: "Features") {
-    subsection(title: "Macros") {
-      p "Macros allow for the re-use of basic building blocks"
+    
+    subsection(title: "Node Macros") {
+      p "Macros are similar to functions in other languages."
+      p "Node macros are a simple form of macro."
       
       example ""
-        node h3 with string
-        node pre with string
-        macro code with s : string {
-          h3 "Code"
-          pre s
+        node text with string
+        node section with generator
+        
+        section {
+          text "Hi there"
         }
         
-        code &quot;&quot;
-          // We put our code here
-        &quot;&quot;
+        // This view would create a node tree with the text node as a child
+        // of the section node.
+      ""
+    }
+    
+    subsection(title: "Named Arguments") {
+      p ""
+        Macros are invoked using named arguments and can be provided in
+        any order.
+      "" 
+      
+      example ""
+        node detail(label : string, value : string)
+        
+        detail(label: "Username", value: "Bob")        
+        detail(value: "Red", label: "Favourite colour")        
+      ""
+    }
+    
+    subsection(title: "Default Arguments") {
+      p ""
+        Arguments can have default values.
+      "" 
+      
+      example ""
+        node detail(label : string, value : string = "Unknown")
+        
+        detail(label: "Username", value: "Bob")        
+        detail(label: "Favourite colour")
+        
+        // The last detail node will contain a value of "Unknown" as it
+        // has not been specified when calling the macro.
+      ""
+    }
+    
+    subsection(title: "Controllers") {
+      p ""
+        Controllers are the only way of passing data in to a view. This allows
+        the view to reference properties on a controller in a type safe manner.
+      ""
+      
+      example ""
+        controller uk.co.colinhowe.example.WikiPageController
+        
+        node text with string
+        
+        text "Page name: "
+        text c.pageName // Note this calls the controller's getPageName() method
+      ""
+    }
+    
+    subsection(title: "Macros") {
+      p ""
+        Proper macros allow for the execution of code to decide what nodes
+        to output yet still retain simple views.
+      "" 
+      
+      example ""
+        macro profile(detailed : bool, profile : UserProfile) with s : string {
+          detail(label: "Name", value: profile.name)
+          
+          if (detailed) {
+            detail(label: "E-mail", value: profile.email)
+            detail(label: "Phone number", value: profile.phoneNumber)
+          }
+        }
+        
+        profile(detailed : true, c.customer)
+      ""
+    }
+    
+    subsection(title: "Generators") {
+      p ""
+        Gleam allows you to pass generators to macros. Generators are
+        just blocks of code contained with curly braces { }. These can then
+        be included in the node tree by macros.
+      "" 
+      
+      example ""
+        macro two_times with generator g {
+          title "First"
+          include g
+          title "Second"
+          include g
+        }
+        
+        two_times {
+          text "Repeat me!"
+        }
+        
+        /*
+         * Creates a node tree like:
+         *   title "First"
+         *   text "Repeat me!"
+         *   title "Second"
+         *   text "Repeat me!"
+         */
+      ""
+    }
+    
+    subsection(title: "Iteration") {
+      p ""
+        Iteration using a for-each style is catered for.
+      ""
+      
+      example ""
+        for (person : Person in c.people) {
+          detail(label: "Name", value: person.name)
+        }
+      ""
+    }
+
+    subsection(title: "Static property references") {
+      p ""
+        Static property references allow you to generate a reference to a 
+        bean on a view's controller. This then gives you access to not only
+        the value of the bean but also the path of the bean in relation to
+        the controller.
+      ""
+      
+      example ""
+        controller uk.co.colinhowe.example.SignupController
+        
+        macro field(field : ref) with label : string {
+          node span label
+          node input(id: p.path) p.value
+          // This will create an input text box that uses the path
+          // of the bean as the ID
+        }
+        
+        // Note, we don't use get/set here, Gleam will figure this out
+        field(p: @c.name) "Name"
       ""
     }
     
@@ -29,6 +160,7 @@ page(title: "Features") {
         macro section(title : string) with g : generator 
             restrict to top level {
           h3 s
+          include g
         }
         
         section(title: "Welcome") {
@@ -68,12 +200,9 @@ page(title: "Features") {
       
       example ""
         node span with string
-        node p with generator
         macro p with g : generator {
-          node p { // Specify that the node should be called and not the macro
-            span "top called!"
-            include g
-          }
+          span "top called!"
+          include g
         }
         
         macro p with s : string {
@@ -107,71 +236,6 @@ page(title: "Features") {
       ""
     }
     
-    subsection(title: "Iteration") {
-      p ""
-        Iteration using a for-each style is catered for.
-      ""
-      
-      example ""
-        for (Person person in c.people) {
-          span "Name: "
-          span person.name
-        }
-      ""
-    }
-    
-    subsection(title: "Controllers") {
-      p ""
-        Controllers are the only way of passing data in to a view. This allows
-        the view to reference properties on a controller in a type safe manner.
-      ""
-      
-      example ""
-        controller uk.co.colinhowe.example.WikiPageController
-        
-        span "Page name: "
-        span c.pageName // Note this calls the controller's getPageName() method
-      ""
-    }
-
-    subsection(title: "Static property references") {
-      p ""
-        Static property references allow you to generate a reference to a 
-        bean on a view's controller. This then gives you access to not only
-        the value of the bean but also the path of the bean in relation to
-        the controller.
-      ""
-      
-      example ""
-        controller uk.co.colinhowe.example.SignupController
-        
-        macro field(field : ref) with label : string {
-          node span label
-          node input(id: p.path) p.value
-          // This will create an input text box that uses the path
-          // of the bean as the ID
-        }
-        
-        // Note, we don't use get/set here, Gleam will figure this out
-        field(p: @c.name) "Name"
-      ""
-    }
-    
-    subsection(title: "if/else") {
-      p ""
-        Basic if/else expressions are supported.
-      ""
-      
-      example ""
-        var condition = true
-        if (condition) {
-          h1 "Condition was true"
-        } else {
-          h1 "Condition was false"
-        }
-      ""
-    }
-    
     subsection(title: "Basic type inference") {
       p "Gleam supports very basic type inference when declaring variables."
       p ""
@@ -195,6 +259,15 @@ page(title: "Features") {
           This allows you to add indentation if you want but doesn't create
               messy code :)
         &quot;&quot;
+        
+        section {
+          subsection {
+            p &quot;&quot;
+              This string won't contain any leading spaces because of the indentation
+              rules.
+            &quot;&quot;
+          }
+        }
       ""
     }
     
@@ -221,17 +294,29 @@ page(title: "Features") {
       ""
       example ""
         dynamic macro field with string s
+        
         macro field1 with string s {
-          node field1 s
+          text "Field1 called"
+          text s
         }
+        
         macro field2 with string s {
-          node field2 s
+          text "Field2 called"
+          text s
         }
+        
         field = field1
         field "A"
         field = field2
         field "B"
-        // The above would output two nodes, field1 and then field2
+        
+        /*
+         * The above would output the following:
+         *   text "Field1 called"
+         *   text "A"
+         *   text "Field2 called"
+         *   text "B"
+         */
       ""
     }
   }

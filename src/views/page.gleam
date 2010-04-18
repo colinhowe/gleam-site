@@ -8,12 +8,11 @@ node menu with generator
 
 macro page_menu {
   menu {
-    menu_item(target: "roadmap") "Roadmap"
+    menu_item(target: "index") "What is Gleam?"
+    menu_item(target: "features") "Features"
     menu_item(target: "antifeatures") "Anti-features"
     menu_item(target: "quickstart") "Quick start"
-    menu_item(target: "features") "Features"
-    menu_item(target: "examples") "Examples"
-    menu_item(target: "usepatterns") "Use Patterns"
+    menu_item(target: "roadmap") "Roadmap"
   }
 }
 

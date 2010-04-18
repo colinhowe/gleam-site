@@ -14,6 +14,6 @@ $(document).ready(function() {
     return false;
   });
   
-  SyntaxHighlighter.defaults['gutter'] = false;
+//  SyntaxHighlighter.defaults['gutter'] = false;
   SyntaxHighlighter.all();
 });

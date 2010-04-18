@@ -49,6 +49,7 @@ public class HtmlCreator {
     handlers.put("item", new SnippetNodeHandler(this, "item"));
     handlers.put("code", new SnippetNodeHandler(this, "code"));
     handlers.put("example", new SnippetNodeHandler(this, "example"));
+    handlers.put("leading_section", new SnippetNodeHandler(this, "leading_section"));
     
     handlers.put("menu", new NodeHandler() {
       public void handle(Node node, StringBuilder builder) {

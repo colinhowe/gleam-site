@@ -1,22 +1,24 @@
 page(title: "Anti-features") {
   section(title: "What are Anti-features?") {
-    p {
-      a(href: "http://en.wikipedia.org/wiki/Anti-feature") "Anti-features"
-      span " are design features that reduce the amount of functionality in something."
+    leading_section {
+      p {
+        a(href: "http://en.wikipedia.org/wiki/Anti-feature") "Anti-features"
+        span " are design features that reduce the amount of functionality in something."
+      }
+      
+      p ""
+        Usually this is viewed as a bad thing. However, in the case of Gleam it is intended as a good thing.
+        Certain features have been added as a means of encouraging developer's to put their business logic
+        in the right place and not in the view layer.
+      ""
+      
+      p ""
+        Gleam also lacks certain features, such as classes. This is part of the
+        design of Gleam and it is hoped that it will encourage better seperation of
+        concerns in your views. 
+      ""
     }
-    
-    p ""
-      Usually this is viewed as a bad thing. However, in the case of Gleam it is intended as a good thing.
-      Certain features have been added as a means of encouraging developer's to put their business logic
-      in the right place and not in the view layer.
-    ""
-    
-    p ""
-      Gleam also lacks certain features, such as classes. This is part of the
-      design of Gleam and it is hoped that it will encourage better seperation of
-      concerns in your views. 
-    ""
-    
+        
     subsection(title: "Omitted Features") {
       p ""
         Below is a list of features that are in many languages but have been purposefully omitted
