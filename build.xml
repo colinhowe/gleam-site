@@ -1,4 +1,4 @@
-<project name="Gleam">
+<project name="Gleam Site">
   <property name="sources.dir" value="src" />
   <property name="tests.dir" value="test" />
   <property name="build.dir" value="build" />
@@ -56,11 +56,10 @@
   </target>
 	
   <target name="compile" depends="compile.src">
-    <copy todir="${build.dir}">
-      <fileset dir="${sources.dir}/output">
-        <exclude name="**/*.java"/>
-      </fileset>
-    </copy>
+    <jar destfile="gleam-site.jar"
+         basedir="${build.dir}"
+         excludes="**/Test.class"
+    />
 	</target>	
   
   <target name="runtests" depends="init">

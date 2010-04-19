@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Date;
@@ -34,7 +35,7 @@ import Acme.Serve.Serve;
 @SuppressWarnings("serial")
 public class RequestProcessor extends HttpServlet {
   
-  private boolean developerMode = true;
+  private boolean developerMode = false;
   
   /**
    * Compiles the views.
@@ -194,11 +195,12 @@ public class RequestProcessor extends HttpServlet {
       e.printStackTrace(pw);
       result = sw.toString();
     }
-    
-    final BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(response.getOutputStream()));
-    writer.write(result);
-    writer.flush();
-    writer.close();
+
+    final PrintWriter writer = response.getWriter();
+    response.addIntHeader("Content-Length", result.length());
+    writer.println(result);
+//    writer.flush();
+//    writer.close();
     
     long endTime = System.currentTimeMillis();
     long totalTime = endTime - startTime;
