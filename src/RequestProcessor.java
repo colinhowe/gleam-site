@@ -1,27 +1,3 @@
-import java.io.BufferedWriter;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Map;
-import java.util.HashMap;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import gleam.CompilationError;
 import gleam.CompilationResult;
 import gleam.Node;
@@ -30,12 +6,33 @@ import gleam.compiler.CompilationUnit;
 import gleam.compiler.FileCompilationUnit;
 import gleam.compiler.GleamCompiler;
 import gleam.util.HtmlCreator;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import Acme.Serve.Serve;
 
 @SuppressWarnings("serial")
 public class RequestProcessor extends HttpServlet {
   
-  private boolean developerMode = false;
+  private boolean developerMode = true;
   
   /**
    * Compiles the views.

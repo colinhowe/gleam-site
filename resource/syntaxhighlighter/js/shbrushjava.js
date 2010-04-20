@@ -42,7 +42,7 @@ SyntaxHighlighter.brushes.Java = function() {
 
 	this.regexList = [
 		{ regex: SyntaxHighlighter.regexLib.singleLineCComments,	css: 'comments' },		// one line comments
-    { regex: /(""(([^"])|("[^"]))*"")|("[^"\n\r]+")/gm,   css: 'string' },    // strings
+    { regex: /("(([^"\\])|(\\.))*")/gm,   css: 'string' },    // strings
 		{ regex: /\/\*([^\*][\s\S]*)?\*\//gm,						css: 'comments' },	 	// multiline comments
 		{ regex: /\b([\d]+(\.[\d]+)?|0x[a-f0-9]+)\b/gi,				css: 'value' },			// numbers
 		{ regex: /([a-zA-Z0-9]+)\s*: /gm,				css: 'variable', func: secondMatch },			// parameter names

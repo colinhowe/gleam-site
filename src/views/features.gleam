@@ -5,135 +5,135 @@ page(title: "Features") {
       p "Macros are similar to functions in other languages."
       p "Node macros are a simple form of macro."
       
-      example ""
+      example "
         node text with string
         node section with generator
         
         section {
-          text "Hi there"
+          text \"Hi there\"
         }
         
         // This view would create a node tree with the text node as a child
         // of the section node.
-      ""
+      "
     }
     
     subsection(title: "Named Arguments") {
-      p ""
+      p "
         Macros are invoked using named arguments and can be provided in
         any order.
-      "" 
+      "
       
-      example ""
+      example "
         node detail(label : string, value : string)
         
-        detail(label: "Username", value: "Bob")        
-        detail(value: "Red", label: "Favourite colour")        
-      ""
+        detail(label: \"Username\", value: \"Bob\")        
+        detail(value: \"Red\", label: \"Favourite colour\")        
+      "
     }
     
     subsection(title: "Default Arguments") {
-      p ""
+      p "
         Arguments can have default values.
-      "" 
+      "
       
-      example ""
-        node detail(label : string, value : string = "Unknown")
+      example "
+        node detail(label : string, value : string = \"Unknown\")
         
-        detail(label: "Username", value: "Bob")        
-        detail(label: "Favourite colour")
+        detail(label: \"Username\", value: \"Bob\")        
+        detail(label: \"Favourite colour\")
         
-        // The last detail node will contain a value of "Unknown" as it
+        // The last detail node will contain a value of \"Unknown\" as it
         // has not been specified when calling the macro.
-      ""
+      "
     }
     
     subsection(title: "Controllers") {
-      p ""
+      p "
         Controllers are the only way of passing data in to a view. This allows
         the view to reference properties on a controller in a type safe manner.
-      ""
+      "
       
-      example ""
+      example "
         controller uk.co.colinhowe.example.WikiPageController
         
         node text with string
         
-        text "Page name: "
+        text \"Page name: \"
         text c.pageName // Note this calls the controller's getPageName() method
-      ""
+      "
     }
     
     subsection(title: "Macros") {
-      p ""
+      p "
         Proper macros allow for the execution of code to decide what nodes
         to output yet still retain simple views.
-      "" 
+      "
       
-      example ""
+      example "
         macro profile(detailed : bool, profile : UserProfile) with s : string {
-          detail(label: "Name", value: profile.name)
+          detail(label: \"Name\", value: profile.name)
           
           if (detailed) {
-            detail(label: "E-mail", value: profile.email)
-            detail(label: "Phone number", value: profile.phoneNumber)
+            detail(label: \"E-mail\", value: profile.email)
+            detail(label: \"Phone number\", value: profile.phoneNumber)
           }
         }
         
         profile(detailed : true, c.customer)
-      ""
+      "
     }
     
     subsection(title: "Generators") {
-      p ""
+      p "
         Gleam allows you to pass generators to macros. Generators are
         just blocks of code contained with curly braces { }. These can then
         be included in the node tree by macros.
-      "" 
-      
-      example ""
+      "
+            
+      example "
         macro two_times with generator g {
-          title "First"
+          title \"First\"
           include g
-          title "Second"
+          title \"Second\"
           include g
         }
         
         two_times {
-          text "Repeat me!"
+          text \"Repeat me!\"
         }
         
         /*
          * Creates a node tree like:
-         *   title "First"
-         *   text "Repeat me!"
-         *   title "Second"
-         *   text "Repeat me!"
+         *   title \"First\"
+         *   text \"Repeat me!\"
+         *   title \"Second\"
+         *   text \"Repeat me!\"
          */
-      ""
+      "
     }
     
     subsection(title: "Iteration") {
-      p ""
+      p "
         Iteration using a for-each style is catered for.
-      ""
+      "
       
-      example ""
+      example "
         for (person : Person in c.people) {
-          detail(label: "Name", value: person.name)
+          detail(label: \"Name\", value: person.name)
         }
-      ""
+      "
     }
 
     subsection(title: "Static property references") {
-      p ""
+      p "
         Static property references allow you to generate a reference to a 
         bean on a view's controller. This then gives you access to not only
         the value of the bean but also the path of the bean in relation to
         the controller.
-      ""
+      "
       
-      example ""
+      example "
         controller uk.co.colinhowe.example.SignupController
         
         macro field(field : ref) with label : string {
@@ -144,17 +144,17 @@ page(title: "Features") {
         }
         
         // Note, we don't use get/set here, Gleam will figure this out
-        field(p: @c.name) "Name"
-      ""
+        field(p: @c.name) \"Name\"
+      "
     }
     
     subsection(title: "Macro/Node Restrictions") {
-      p ""
+      p "
         Restrict macros so that they can only be called within macros with
         certain names.
-      ""
+      "
       
-      example ""
+      example "
         node h3 with string
         node p with string restrict to section
         macro section(title : string) with g : generator 
@@ -163,22 +163,22 @@ page(title: "Features") {
           include g
         }
         
-        section(title: "Welcome") {
-          p "Welcome to my page!"
+        section(title: \"Welcome\") {
+          p \"Welcome to my page!\"
         }
         
-        p "This won't compile, because p isn't allowed here!"
-      ""
+        p \"This won't compile, because p isn't allowed here!\"
+      "
     }
     
     subsection(title: "Cascading Arguments") {
-      p ""
+      p "
         Cascading arguments allow an argument to be specified in a
         macro statement and then the argument is passed in wherever
         possible to any child macros.
-      ""
+      "
       
-      example ""
+      example "
         node form(cascade readonly : boolean) with generator
         node textinput(id : string, readonly : boolean) with string
         
@@ -186,44 +186,44 @@ page(title: "Features") {
           // readonly: true will be passed into the call to textinput
           // as it is a cascading argument on the readonly argument in
           // the form macro
-          textinput(id: "name") "Name"
+          textinput(id: \"name\") \"Name\"
         }
-      ""
+      "
     }
     
     subsection(title: "Macro overloading") {
-      p ""
+      p "
         Multiple macros can have the same name. Arguments will be used to
         find the macro to call. If more than one macro matches then a
         compiler error will occur.
-      ""
+      "
       
-      example ""
+      example "
         node span with string
         macro p with g : generator {
-          span "top called!"
+          span \"top called!\"
           include g
         }
         
         macro p with s : string {
           span s
-          span "bottom called!"
+          span \"bottom called!\"
         }
         
         p {
-          span "This will call the top p macro"
+          span \"This will call the top p macro\"
         }
         
-        p "This will call the bottom p macro"
-      ""
+        p \"This will call the bottom p macro\"
+      "
     }
     
     subsection(title: "Generics") {
-      p ""
+      p "
         Generics are supported in Gleam in a similar way to Java.
-      ""
+      "
       
-      example ""
+      example "
         macro result_set&lt;T&gt;(list : java.util.List&lt;T&gt;) with g : generator(row : T) {
           for (T t in list) {
             include g(row: t)
@@ -233,91 +233,91 @@ page(title: "Features") {
         result_set(list: c.people) { person : Person =&gt;
           span person.name
         }
-      ""
+      "
     }
     
     subsection(title: "Basic type inference") {
       p "Gleam supports very basic type inference when declaring variables."
-      p ""
+      p "
         The inference will assume that the variable takes the type of whatever
         is being assigned to it.
-      ""
+      "
       
-      example ""
-        var name = "someString"
+      example "
+        var name = \"someString\"
         name = 5 // This won't compile as name is a string and 5 is not a string
-      ""
+      "
     }
     
     subsection(title: "Tidy multi-line strings") {
       p "Multi-line strings are supported in a way that handles indentation."
       
-      example ""
-        p &quot;&quot;
+      example "
+        p \"
           This string is over several lines.
           However, it has no leading spaces until the very last line.
           This allows you to add indentation if you want but doesn't create
               messy code :)
-        &quot;&quot;
+        \"
         
         section {
           subsection {
-            p &quot;&quot;
+            p \"
               This string won't contain any leading spaces because of the indentation
               rules.
-            &quot;&quot;
+            \"
           }
         }
-      ""
+      "
     }
     
     subsection(title: "Dynamic macros") {
-      p ""
+      p "
         Dynamic macros allow for macro implementations to be switched at run time.
         This can be useful in various scenarios. For example, you could specify a
         table macro that takes a list as a parameter and then takes a generator to
         be called multiple times that defines only the columns.
-      ""
+      "
       
-      code ""
+      code "
         table(items: c.people) { person : Person =&gt;
-          col(name: "name") person.name
-          col(name: "age") person.age
+          col(name: \"name\") person.name
+          col(name: \"age\") person.age
         }
-      ""
+      "
       
-      p ""
+      p "
         In the above example the table macro would invoke the generator once
         with the col macro set to something that outputs headings. Then it
         would iterate over each person with the col macro set to output individual
         cells in the table.
-      ""
-      example ""
+      "
+      example "
         dynamic macro field with string s
         
         macro field1 with string s {
-          text "Field1 called"
+          text \"Field1 called\"
           text s
         }
         
         macro field2 with string s {
-          text "Field2 called"
+          text \"Field2 called\"
           text s
         }
         
         field = field1
-        field "A"
+        field \"A\"
         field = field2
-        field "B"
+        field \"B\"
         
         /*
          * The above would output the following:
-         *   text "Field1 called"
-         *   text "A"
-         *   text "Field2 called"
-         *   text "B"
+         *   text \"Field1 called\"
+         *   text \"A\"
+         *   text \"Field2 called\"
+         *   text \"B\"
          */
-      ""
+      "
     }
   }
 }
