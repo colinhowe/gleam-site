@@ -1,7 +1,7 @@
 page(title: "Quick Start") {
   section(title: "Quick start") {
-    p ""
+    p "
       Coming soon! :)
-    ""
+    "
   }
 }

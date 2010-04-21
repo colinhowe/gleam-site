@@ -21,7 +21,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -223,28 +222,5 @@ public class RequestProcessor extends HttpServlet {
     long endTime = System.currentTimeMillis();
     long totalTime = endTime - startTime;
     System.out.println("Execution performed in " + totalTime + "ms");
-  }
-  
-  private String outputNode(final Node node) {
-    StringBuffer attributes = new StringBuffer();
-    StringBuffer result = new StringBuffer();
-    for (Entry<String, Object> attribute : node.getAttributes().entrySet()) {
-      attributes.append(" " + attribute.getKey() + "=\"" + attribute.getValue() + "\"");
-    }
-
-    if (node.getValue() != null || node.getNodes() != null) {
-      result.append("<" + node.getTagName() + attributes + ">");
-      if (node.getValue() != null) {
-        result.append(node.getValue().toString());
-      } else if (node.getNodes() != null) {
-        for (final Node childNode : node.getNodes()) {
-          result.append(outputNode(childNode));
-        }
-      }
-      result.append("</" + node.getTagName() + ">");
-    } else {
-      result.append("<" + node.getTagName() + attributes + "/>");
-    }
-    return result.toString();
   }
 }
