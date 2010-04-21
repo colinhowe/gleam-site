@@ -1,27 +1,3 @@
-import java.io.BufferedWriter;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Map;
-import java.util.HashMap;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import gleam.CompilationError;
 import gleam.CompilationResult;
 import gleam.Node;
@@ -30,12 +6,34 @@ import gleam.compiler.CompilationUnit;
 import gleam.compiler.FileCompilationUnit;
 import gleam.compiler.GleamCompiler;
 import gleam.util.HtmlCreator;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Map.Entry;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import Acme.Serve.Serve;
 
 @SuppressWarnings("serial")
 public class RequestProcessor extends HttpServlet {
   
-  private boolean developerMode = false;
+  private static boolean developerMode = false;
   
   /**
    * Compiles the views.
@@ -79,10 +77,25 @@ public class RequestProcessor extends HttpServlet {
     return result;
   }
   
+  public static Properties loadConfiguration() {
+    Properties propertiesFile = new Properties();
+    try {
+      propertiesFile.load(new FileInputStream("config.properties"));
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to load config.properties", e);
+    }
+    return propertiesFile;
+  }
+  
   public static void main(String[] args) {
+    Properties config = loadConfiguration();
+    
+    // Set developer mode
+    developerMode = Boolean.parseBoolean(config.getProperty("developermode"));
+    
     // setting properties for the server, and exchangable Acceptors
-    java.util.Properties properties = new java.util.Properties();
-    properties.put("port", 8080);
+    Properties properties = new java.util.Properties();
+    properties.put("port", Integer.parseInt(config.getProperty("port")));
     properties.setProperty(Acme.Serve.Serve.ARG_NOHUP, "nohup");
 
     final Serve srv = new Serve();
@@ -158,6 +171,7 @@ public class RequestProcessor extends HttpServlet {
     long startTime = System.currentTimeMillis();
     
     response.addHeader("Expires", "Fri, 30 Oct 1998 14:19:41 GMT");
+    response.addHeader("Content-Type", "text/html");
     
     // Locate all the gleam files
     String requestUri = request.getRequestURI().substring(1);
@@ -184,7 +198,11 @@ public class RequestProcessor extends HttpServlet {
         
         for (int i = 0; i < 1; i++) {
           final Object controller = new DummyController();
-          final View view = getView(request.getRequestURI().substring(1));
+          String viewname = request.getRequestURI().substring(1);
+          if (viewname.equals("")) {
+            viewname = "index";
+          }
+          final View view = getView(viewname);
           final List<Node> nodes = view.view(controller);
           result = new HtmlCreator().generate(nodes);
         }

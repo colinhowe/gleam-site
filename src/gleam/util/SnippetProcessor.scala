@@ -5,7 +5,6 @@ class SnippetProcessor {
     // 3.85
     val buffer = new StringBuilder
     var currentIndex = 0
-    var inSubstitution = false
     while (currentIndex < snippet.length) {
       val firstSepIndex = snippet.indexOf("%", currentIndex)
       if (firstSepIndex == -1) {

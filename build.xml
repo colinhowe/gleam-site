@@ -1,4 +1,4 @@
-<project name="Gleam Site">
+<project name="Gleam Site" default="compile" >
   <property name="sources.dir" value="src" />
   <property name="tests.dir" value="test" />
   <property name="build.dir" value="build" />
