@@ -46,7 +46,8 @@ page(title: "Quick Start") {
         If all is well, you will be greeted with something like:
       "  
       code "
-        [java] [Sun Apr 25 16:21:44 BST 2010] TJWS httpd 0.0.0.0 - Acme.Serve.SelectorAcceptor@11cc367 is listening.
+        2010-04-25 20:54:50.441:INFO::jetty-7.0.2.v20100331
+        2010-04-25 20:54:50.484:INFO::Started SelectChannelConnector@0.0.0.0:8080
       "
     }
     
