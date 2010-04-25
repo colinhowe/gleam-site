@@ -25,7 +25,7 @@ page(title: "Quick Start") {
     subsection(title: "2. Download") {
       p {
         span "Version 0.1.0 is available "
-        a(href: "resource/gleam-quickstart-0-1-0.zip") "here"
+        a(href: "gleam-quickstart-0-1-0.zip") "here"
       }
     }
     subsection(title: "3. Unzip") {
