@@ -48,7 +48,7 @@ import Acme.Serve.Serve;
 @SuppressWarnings("serial")
 public class RequestProcessor extends HttpServlet {
   
-  private static boolean developerMode = false;
+  private static boolean developerMode = true;
   
   /**
    * Compiles the views.
