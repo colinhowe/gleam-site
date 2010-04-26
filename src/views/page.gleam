@@ -13,6 +13,8 @@ macro page_menu {
     menu_item(target: "antifeatures") "Anti-features"
     menu_item(target: "quickstart") "Quick start"
     menu_item(target: "roadmap") "Roadmap"
+    menu_item(target: "license") "License"
+    menu_item(target: "contact") "Contact"
   }
 }
 
